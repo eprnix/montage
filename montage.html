@@ -1,900 +1,947 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>montage.md</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
-
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
-
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
- * Markdown PDF CSS
+<!DOCTYPE html><html><head>
+      <title>montage</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:////Users/mba/.vscode/extensions/shd101wyy.markdown-preview-enhanced-0.6.3/node_modules/@shd101wyy/mume/dependencies/katex/katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <style>
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
  */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
 
- body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
 }
 
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
 }
 
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
 }
 
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
+.token.comment,
+.token.blockquote {
+  color: #969896;
 }
 
-.emoji {
-	height: 1.4em;
+.token.cdata {
+  color: #183691;
 }
 
-code {
-	font-size: 14px;
-	line-height: 19px;
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
 }
 
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
 }
 
-/* Page Break : use <div class="page"/> to insert page break
--------------------------------------------------------- */
-.page {
-	page-break-after: always;
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
 }
 
-</style>
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
 
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
-<p><img src="2022-05-14-13-43-30.png" alt=""></p>
-<h1 id="%E7%9B%AE%E6%AC%A1">目次</h1>
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-<!-- code_chunk_output -->
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+.md-sidebar-toc.md-sidebar-toc {
+  padding-top: 40px;
+}
+#sidebar-toc-btn {
+  bottom: unset;
+  top: 8px;
+}
+.markdown-preview.markdown-preview h1,
+.markdown-preview.markdown-preview h2 {
+  border-bottom: 1px solid #eaecef;
+}
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <div><p><img src="2022-05-14-13-43-30.png" alt></p>
+<h1 class="mume-header" id="%E7%9B%AE%E6%AC%A1">&#x76EE;&#x6B21;</h1>
+
+<div class="code-chunk" data-id="code-chunk-id-0" data-cmd="toc"><div class="input-div"><div class="btn-group"><div class="run-btn btn"><span>&#x25B6;&#xFE0E;</span></div><div class="run-all-btn btn">all</div></div><div class="status">running...</div></div><div class="output-div"></div></div><ul>
+<li><a href="#%E7%9B%AE%E6%AC%A1">&#x76EE;&#x6B21;</a></li>
+<li><a href="#todo%E6%B0%97%E3%81%AB%E3%81%AA%E3%82%8B%E7%AE%87%E6%89%80">TODO&#x30FB;&#x6C17;&#x306B;&#x306A;&#x308B;&#x7B87;&#x6240;</a></li>
+<li><a href="#%E6%83%85%E5%A0%B1">&#x60C5;&#x5831;</a>
 <ul>
-<li><a href="#%E7%9B%AE%E6%AC%A1">目次</a></li>
-<li><a href="#todo%E6%B0%97%E3%81%AB%E3%81%AA%E3%82%8B%E7%AE%87%E6%89%80">TODO・気になる箇所</a></li>
-<li><a href="#%E6%83%85%E5%A0%B1">情報</a>
+<li><a href="#%E6%8D%9C%E6%9F%BB%E8%B3%87%E6%96%99">&#x635C;&#x67FB;&#x8CC7;&#x6599;</a>
 <ul>
-<li><a href="#%E6%8D%9C%E6%9F%BB%E8%B3%87%E6%96%99">捜査資料</a>
-<ul>
-<li><a href="#%E6%A8%8B%E5%B7%9D%E8%A3%95%E5%AD%9D%E3%81%AE%E4%BA%A4%E5%8F%8B%E9%96%A2%E4%BF%82">樋川裕孝の交友関係</a></li>
-<li><a href="#%E7%8F%BE%E5%A0%B4%E7%8A%B6%E6%B3%81%E9%81%BA%E4%BD%93%E5%AE%89%E7%BD%AE">現場状況/遺体安置</a></li>
-<li><a href="#%E9%8C%B2%E9%9F%B3%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8">録音メッセージ</a></li>
+<li><a href="#%E6%A8%8B%E5%B7%9D%E8%A3%95%E5%AD%9D%E3%81%AE%E4%BA%A4%E5%8F%8B%E9%96%A2%E4%BF%82">&#x6A0B;&#x5DDD;&#x88D5;&#x5B5D;&#x306E;&#x4EA4;&#x53CB;&#x95A2;&#x4FC2;</a></li>
+<li><a href="#%E7%8F%BE%E5%A0%B4%E7%8A%B6%E6%B3%81%E9%81%BA%E4%BD%93%E5%AE%89%E7%BD%AE">&#x73FE;&#x5834;&#x72B6;&#x6CC1;/&#x907A;&#x4F53;&#x5B89;&#x7F6E;</a></li>
+<li><a href="#%E9%8C%B2%E9%9F%B3%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8">&#x9332;&#x97F3;&#x30E1;&#x30C3;&#x30BB;&#x30FC;&#x30B8;</a></li>
 </ul>
 </li>
-<li><a href="#%E9%81%BA%E5%93%81">遺品</a>
+<li><a href="#%E9%81%BA%E5%93%81">&#x907A;&#x54C1;</a>
 <ul>
-<li><a href="#ipad%E3%81%AE%E6%97%A5%E8%A8%98">ipadの日記</a></li>
-<li><a href="#%E6%89%8B%E5%B8%B3">手帳</a></li>
-<li><a href="#%E8%B2%A1%E5%B8%83">財布</a></li>
-<li><a href="#%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8">国会図書館</a></li>
+<li><a href="#ipad%E3%81%AE%E6%97%A5%E8%A8%98">ipad&#x306E;&#x65E5;&#x8A18;</a></li>
+<li><a href="#%E6%89%8B%E5%B8%B3">&#x624B;&#x5E33;</a></li>
+<li><a href="#%E8%B2%A1%E5%B8%83">&#x8CA1;&#x5E03;</a></li>
+<li><a href="#%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8">&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;</a></li>
 </ul>
 </li>
-<li><a href="#n%E5%A4%A7%E5%AD%A6">N大学</a>
+<li><a href="#n%E5%A4%A7%E5%AD%A6">N&#x5927;&#x5B66;</a>
 <ul>
-<li><a href="#%E9%81%BA%E4%BD%93">遺体</a></li>
-<li><a href="#%E9%80%9A%E9%99%A2%E3%81%AE%E7%90%86%E7%94%B1">通院の理由</a></li>
+<li><a href="#%E9%81%BA%E4%BD%93">&#x907A;&#x4F53;</a></li>
+<li><a href="#%E9%80%9A%E9%99%A2%E3%81%AE%E7%90%86%E7%94%B1">&#x901A;&#x9662;&#x306E;&#x7406;&#x7531;</a></li>
 </ul>
 </li>
-<li><a href="#%E7%8F%BE%E5%A0%B4%E3%81%A8%E8%81%9E%E3%81%8D%E8%BE%BC%E3%81%BF">現場と聞き込み</a>
+<li><a href="#%E7%8F%BE%E5%A0%B4%E3%81%A8%E8%81%9E%E3%81%8D%E8%BE%BC%E3%81%BF">&#x73FE;&#x5834;&#x3068;&#x805E;&#x304D;&#x8FBC;&#x307F;</a>
 <ul>
-<li><a href="#%E6%99%AE%E6%AE%B5%E3%81%AE%E6%A7%98%E5%AD%90">普段の様子</a></li>
-<li><a href="#%E7%97%85%E9%99%A2%E3%81%AB%E8%A1%8C%E3%81%A3%E3%81%9F%E3%81%A8%E3%81%8D">病院に行ったとき</a></li>
-<li><a href="#%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">カレンダー</a></li>
+<li><a href="#%E6%99%AE%E6%AE%B5%E3%81%AE%E6%A7%98%E5%AD%90">&#x666E;&#x6BB5;&#x306E;&#x69D8;&#x5B50;</a></li>
+<li><a href="#%E7%97%85%E9%99%A2%E3%81%AB%E8%A1%8C%E3%81%A3%E3%81%9F%E3%81%A8%E3%81%8D">&#x75C5;&#x9662;&#x306B;&#x884C;&#x3063;&#x305F;&#x3068;&#x304D;</a></li>
+<li><a href="#%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">&#x30AB;&#x30EC;&#x30F3;&#x30C0;&#x30FC;</a></li>
 </ul>
 </li>
-<li><a href="#%E6%9D%BE%E4%BC%8F%E9%96%A2%E9%80%A3">松伏関連</a></li>
-<li><a href="#%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%83%A8%E5%B1%8B">松伏の部屋</a>
+<li><a href="#%E6%9D%BE%E4%BC%8F%E9%96%A2%E9%80%A3">&#x677E;&#x4F0F;&#x95A2;&#x9023;</a></li>
+<li><a href="#%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%83%A8%E5%B1%8B">&#x677E;&#x4F0F;&#x306E;&#x90E8;&#x5C4B;</a>
 <ul>
-<li><a href="#%E6%96%B0%E8%81%9E%E8%A8%98%E4%BA%8B%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%81%8E%E5%8E%BB">新聞記事　松伏の過去</a></li>
+<li><a href="#%E6%96%B0%E8%81%9E%E8%A8%98%E4%BA%8B%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%81%8E%E5%8E%BB">&#x65B0;&#x805E;&#x8A18;&#x4E8B;&#x3000;&#x677E;&#x4F0F;&#x306E;&#x904E;&#x53BB;</a></li>
 </ul>
 </li>
-<li><a href="#%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8-1">国会図書館</a>
+<li><a href="#%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8-1">&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;</a>
 <ul>
-<li><a href="#%E7%8A%AF%E7%BD%AA%E3%81%AE%E3%82%84%E3%81%A4">犯罪のやつ</a></li>
+<li><a href="#%E7%8A%AF%E7%BD%AA%E3%81%AE%E3%82%84%E3%81%A4">&#x72AF;&#x7F6A;&#x306E;&#x3084;&#x3064;</a></li>
 </ul>
 </li>
-<li><a href="#z%E9%9C%8A%E5%9C%92">Z霊園</a></li>
+<li><a href="#z%E9%9C%8A%E5%9C%92">Z&#x970A;&#x5712;</a></li>
 </ul>
 </li>
-<li><a href="#%E9%81%8E%E5%8E%BB%E3%81%AE%E4%BA%8B%E4%BB%B6">過去の事件</a>
+<li><a href="#%E9%81%8E%E5%8E%BB%E3%81%AE%E4%BA%8B%E4%BB%B6">&#x904E;&#x53BB;&#x306E;&#x4E8B;&#x4EF6;</a>
 <ul>
-<li><a href="#%E4%B8%80%E8%A6%A7">一覧</a>
+<li><a href="#%E4%B8%80%E8%A6%A7">&#x4E00;&#x89A7;</a>
 <ul>
-<li><a href="#%E7%8C%9F%E5%A5%87%E7%8A%AF%E7%BD%AA%E8%A1%80%E5%A1%97%E3%82%8C%E5%A4%AB%E4%BA%BA-%E9%9B%A8%E5%AE%AE%E8%B2%B4%E7%90%86%E7%B5%B5">猟奇犯罪　血塗れ夫人 【雨宮貴理絵】</a></li>
-<li><a href="#%E3%83%87%E3%82%A3%E3%83%8A%E3%83%BC%E3%83%87%E3%82%B6%E3%82%A4%E3%83%8A%E3%83%BC">ディナーデザイナー</a></li>
-<li><a href="#n%E5%A4%A7%E5%AD%A6%E7%97%85%E9%99%A2%E3%81%AE%E6%83%A8%E5%8A%87">N大学病院の惨劇</a></li>
+<li><a href="#%E7%8C%9F%E5%A5%87%E7%8A%AF%E7%BD%AA%E8%A1%80%E5%A1%97%E3%82%8C%E5%A4%AB%E4%BA%BA-%E9%9B%A8%E5%AE%AE%E8%B2%B4%E7%90%86%E7%B5%B5">&#x731F;&#x5947;&#x72AF;&#x7F6A;&#x3000;&#x8840;&#x5857;&#x308C;&#x592B;&#x4EBA; &#x3010;&#x96E8;&#x5BAE;&#x8CB4;&#x7406;&#x7D75;&#x3011;</a></li>
+<li><a href="#%E3%83%87%E3%82%A3%E3%83%8A%E3%83%BC%E3%83%87%E3%82%B6%E3%82%A4%E3%83%8A%E3%83%BC">&#x30C7;&#x30A3;&#x30CA;&#x30FC;&#x30C7;&#x30B6;&#x30A4;&#x30CA;&#x30FC;</a></li>
+<li><a href="#n%E5%A4%A7%E5%AD%A6%E7%97%85%E9%99%A2%E3%81%AE%E6%83%A8%E5%8A%87">N&#x5927;&#x5B66;&#x75C5;&#x9662;&#x306E;&#x60E8;&#x5287;</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#npc">NPC</a>
 <ul>
-<li><a href="#%E3%82%AB%E3%83%8C%E3%83%9E%E3%83%A6%E3%82%A6%E3%82%B5%E3%82%AF">カヌマユウサク</a></li>
-<li><a href="#%E3%82%B5%E3%82%AB%E3%83%9F%E3%83%81">サカミチ</a></li>
-<li><a href="#%E6%A9%8B%E5%85%88%E7%B4%85%E5%A7%AB">橋先紅姫</a></li>
+<li><a href="#%E3%82%AB%E3%83%8C%E3%83%9E%E3%83%A6%E3%82%A6%E3%82%B5%E3%82%AF">&#x30AB;&#x30CC;&#x30DE;&#x30E6;&#x30A6;&#x30B5;&#x30AF;</a></li>
+<li><a href="#%E3%82%B5%E3%82%AB%E3%83%9F%E3%83%81">&#x30B5;&#x30AB;&#x30DF;&#x30C1;</a></li>
+<li><a href="#%E6%A9%8B%E5%85%88%E7%B4%85%E5%A7%AB">&#x6A4B;&#x5148;&#x7D05;&#x59EB;</a></li>
 </ul>
 </li>
 </ul>
-<!-- /code_chunk_output -->
-<!-- pagebreak -->
-<h1 id="todo%E3%83%BB%E6%B0%97%E3%81%AB%E3%81%AA%E3%82%8B%E7%AE%87%E6%89%80">TODO・気になる箇所</h1>
+<div class="pagebreak"> </div>
+<h1 class="mume-header" id="todo%E6%B0%97%E3%81%AB%E3%81%AA%E3%82%8B%E7%AE%87%E6%89%80">TODO&#x30FB;&#x6C17;&#x306B;&#x306A;&#x308B;&#x7B87;&#x6240;</h1>
+
 <ul>
-<li><input type="checkbox" id="checkbox0"><label for="checkbox0">国会図書館に行って閲覧履歴を確認したい（2日目以降）</label>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;&#x306B;&#x884C;&#x3063;&#x3066;&#x95B2;&#x89A7;&#x5C65;&#x6B74;&#x3092;&#x78BA;&#x8A8D;&#x3057;&#x305F;&#x3044;&#xFF08;2&#x65E5;&#x76EE;&#x4EE5;&#x964D;&#xFF09;
 <ul>
-<li><input type="checkbox" id="checkbox1"><label for="checkbox1">樋川</label></li>
-<li><input type="checkbox" id="checkbox2"><label for="checkbox2">松伏</label></li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x6A0B;&#x5DDD;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x677E;&#x4F0F;</li>
 </ul>
 </li>
-<li><input type="checkbox" id="checkbox3" checked="true"><label for="checkbox3">TがTrueならFはFalseじゃね？　という所感共有</label></li>
-<li><input type="checkbox" id="checkbox4"><label for="checkbox4">T、F　と　D とスラッシュの意味</label>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> T&#x304C;True&#x306A;&#x3089;F&#x306F;False&#x3058;&#x3083;&#x306D;&#xFF1F;&#x3000;&#x3068;&#x3044;&#x3046;&#x6240;&#x611F;&#x5171;&#x6709;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> T&#x3001;F&#x3000;&#x3068;&#x3000;D &#x3068;&#x30B9;&#x30E9;&#x30C3;&#x30B7;&#x30E5;&#x306E;&#x610F;&#x5473;
 <ul>
 <li>T:True</li>
 <li>F:False? Fake?</li>
-<li>D:DogStar？</li>
+<li>D:DogStar&#xFF1F;</li>
 </ul>
 </li>
-<li>T/D ＝ 塩谷修一</li>
-<li>塩谷修一の面会記録</li>
-<li><input type="checkbox" id="checkbox5"><label for="checkbox5">黒い斑点（樋川：頭、松伏：首）</label></li>
-<li><input type="checkbox" id="checkbox6"><label for="checkbox6">目が黒く濁る現象　樋川、松伏</label></li>
-<li><input type="checkbox" id="checkbox7"><label for="checkbox7">遺体が冷凍されているのに干からびている　樋川、松伏</label></li>
-<li><input type="checkbox" id="checkbox8"><label for="checkbox8">カヌマ　ユウサクの怪しい動き</label></li>
-<li><input type="checkbox" id="checkbox9"><label for="checkbox9">N大学での世間話</label></li>
-<li><input type="checkbox" id="checkbox10"><label for="checkbox10">腕の怪我は労災？　樋川</label></li>
-<li><input type="checkbox" id="checkbox11"><label for="checkbox11">事件直前は不規則な生活</label></li>
-<li><input type="checkbox" id="checkbox12"><label for="checkbox12">松伏の家</label></li>
-<li><input type="checkbox" id="checkbox13"><label for="checkbox13">松伏が持っていた鍵</label></li>
-<li><input type="checkbox" id="checkbox14"><label for="checkbox14">カノープスとシリウス　明るさの等級を何かに揶揄？</label></li>
-<li><input type="checkbox" id="checkbox15"><label for="checkbox15">雨宮貴理絵の作品はあるか</label></li>
-<li><input type="checkbox" id="checkbox16"><label for="checkbox16">樋川の自傷と似たような事件はあるのか</label></li>
-<li><input type="checkbox" id="checkbox17"><label for="checkbox17">誰がディナーデザイナーを調べていたのか@資料室</label></li>
-<li><input type="checkbox" id="checkbox18"><label for="checkbox18">ディナーデザイナーの遺体確認者は風見ルカ</label></li>
-<li><input type="checkbox" id="checkbox19"><label for="checkbox19">動く死体</label></li>
-<li><input type="checkbox" id="checkbox20"><label for="checkbox20">雑司ヶ谷霊園</label></li>
+<li>T/D &#xFF1D; &#x5869;&#x8C37;&#x4FEE;&#x4E00;</li>
+<li>&#x5869;&#x8C37;&#x4FEE;&#x4E00;&#x306E;&#x9762;&#x4F1A;&#x8A18;&#x9332;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x9ED2;&#x3044;&#x6591;&#x70B9;&#xFF08;&#x6A0B;&#x5DDD;&#xFF1A;&#x982D;&#x3001;&#x677E;&#x4F0F;&#xFF1A;&#x9996;&#xFF09;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x76EE;&#x304C;&#x9ED2;&#x304F;&#x6FC1;&#x308B;&#x73FE;&#x8C61;&#x3000;&#x6A0B;&#x5DDD;&#x3001;&#x677E;&#x4F0F;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x907A;&#x4F53;&#x304C;&#x51B7;&#x51CD;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x306E;&#x306B;&#x5E72;&#x304B;&#x3089;&#x3073;&#x3066;&#x3044;&#x308B;&#x3000;&#x6A0B;&#x5DDD;&#x3001;&#x677E;&#x4F0F;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x30AB;&#x30CC;&#x30DE;&#x3000;&#x30E6;&#x30A6;&#x30B5;&#x30AF;&#x306E;&#x602A;&#x3057;&#x3044;&#x52D5;&#x304D;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> N&#x5927;&#x5B66;&#x3067;&#x306E;&#x4E16;&#x9593;&#x8A71;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x8155;&#x306E;&#x602A;&#x6211;&#x306F;&#x52B4;&#x707D;&#xFF1F;&#x3000;&#x6A0B;&#x5DDD;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x4E8B;&#x4EF6;&#x76F4;&#x524D;&#x306F;&#x4E0D;&#x898F;&#x5247;&#x306A;&#x751F;&#x6D3B;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x677E;&#x4F0F;&#x306E;&#x5BB6;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x677E;&#x4F0F;&#x304C;&#x6301;&#x3063;&#x3066;&#x3044;&#x305F;&#x9375;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x30AB;&#x30CE;&#x30FC;&#x30D7;&#x30B9;&#x3068;&#x30B7;&#x30EA;&#x30A6;&#x30B9;&#x3000;&#x660E;&#x308B;&#x3055;&#x306E;&#x7B49;&#x7D1A;&#x3092;&#x4F55;&#x304B;&#x306B;&#x63F6;&#x63C4;&#xFF1F;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x96E8;&#x5BAE;&#x8CB4;&#x7406;&#x7D75;&#x306E;&#x4F5C;&#x54C1;&#x306F;&#x3042;&#x308B;&#x304B;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x6A0B;&#x5DDD;&#x306E;&#x81EA;&#x50B7;&#x3068;&#x4F3C;&#x305F;&#x3088;&#x3046;&#x306A;&#x4E8B;&#x4EF6;&#x306F;&#x3042;&#x308B;&#x306E;&#x304B;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x8AB0;&#x304C;&#x30C7;&#x30A3;&#x30CA;&#x30FC;&#x30C7;&#x30B6;&#x30A4;&#x30CA;&#x30FC;&#x3092;&#x8ABF;&#x3079;&#x3066;&#x3044;&#x305F;&#x306E;&#x304B;@&#x8CC7;&#x6599;&#x5BA4;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x30C7;&#x30A3;&#x30CA;&#x30FC;&#x30C7;&#x30B6;&#x30A4;&#x30CA;&#x30FC;&#x306E;&#x907A;&#x4F53;&#x78BA;&#x8A8D;&#x8005;&#x306F;&#x98A8;&#x898B;&#x30EB;&#x30AB;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x52D5;&#x304F;&#x6B7B;&#x4F53;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x96D1;&#x53F8;&#x30F6;&#x8C37;&#x970A;&#x5712;</li>
 </ul>
-<!-- pagebreak -->
-<h1 id="%E6%83%85%E5%A0%B1">情報</h1>
-<h2 id="%E6%8D%9C%E6%9F%BB%E8%B3%87%E6%96%99">捜査資料</h2>
-<h3 id="%E6%A8%8B%E5%B7%9D%E8%A3%95%E5%AD%9D%E3%81%AE%E4%BA%A4%E5%8F%8B%E9%96%A2%E4%BF%82">樋川裕孝の交友関係</h3>
+<div class="pagebreak"> </div>
+<h1 class="mume-header" id="%E6%83%85%E5%A0%B1">&#x60C5;&#x5831;</h1>
+
+<h2 class="mume-header" id="%E6%8D%9C%E6%9F%BB%E8%B3%87%E6%96%99">&#x635C;&#x67FB;&#x8CC7;&#x6599;</h2>
+
+<h3 class="mume-header" id="%E6%A8%8B%E5%B7%9D%E8%A3%95%E5%AD%9D%E3%81%AE%E4%BA%A4%E5%8F%8B%E9%96%A2%E4%BF%82">&#x6A0B;&#x5DDD;&#x88D5;&#x5B5D;&#x306E;&#x4EA4;&#x53CB;&#x95A2;&#x4FC2;</h3>
+
 <blockquote>
-<p>洗い出してあるが、元々浮いた話の一つもない男であった為情報らしい情報は無し。
-精神的に病んでいたような兆しも無く、悩みを抱えているような様子もない。
-ただN大学病院に数回だけ足を運んでいる姿が目撃されている。</p>
+<p>&#x6D17;&#x3044;&#x51FA;&#x3057;&#x3066;&#x3042;&#x308B;&#x304C;&#x3001;&#x5143;&#x3005;&#x6D6E;&#x3044;&#x305F;&#x8A71;&#x306E;&#x4E00;&#x3064;&#x3082;&#x306A;&#x3044;&#x7537;&#x3067;&#x3042;&#x3063;&#x305F;&#x70BA;&#x60C5;&#x5831;&#x3089;&#x3057;&#x3044;&#x60C5;&#x5831;&#x306F;&#x7121;&#x3057;&#x3002;<br>
+&#x7CBE;&#x795E;&#x7684;&#x306B;&#x75C5;&#x3093;&#x3067;&#x3044;&#x305F;&#x3088;&#x3046;&#x306A;&#x5146;&#x3057;&#x3082;&#x7121;&#x304F;&#x3001;&#x60A9;&#x307F;&#x3092;&#x62B1;&#x3048;&#x3066;&#x3044;&#x308B;&#x3088;&#x3046;&#x306A;&#x69D8;&#x5B50;&#x3082;&#x306A;&#x3044;&#x3002;<br>
+&#x305F;&#x3060;N&#x5927;&#x5B66;&#x75C5;&#x9662;&#x306B;&#x6570;&#x56DE;&#x3060;&#x3051;&#x8DB3;&#x3092;&#x904B;&#x3093;&#x3067;&#x3044;&#x308B;&#x59FF;&#x304C;&#x76EE;&#x6483;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3002;</p>
 </blockquote>
-<h3 id="%E7%8F%BE%E5%A0%B4%E7%8A%B6%E6%B3%81%E9%81%BA%E4%BD%93%E5%AE%89%E7%BD%AE">現場状況/遺体安置</h3>
+<h3 class="mume-header" id="%E7%8F%BE%E5%A0%B4%E7%8A%B6%E6%B3%81%E9%81%BA%E4%BD%93%E5%AE%89%E7%BD%AE">&#x73FE;&#x5834;&#x72B6;&#x6CC1;/&#x907A;&#x4F53;&#x5B89;&#x7F6E;</h3>
+
 <blockquote>
-<p>何故かエアコンは暖房で入ったままになっており、当初は腐敗を早める為、第三者が手を加えたものと考えられたが指紋の付き方等から本人が死ぬ前に付けたのだと断定された。
-死体発見現場は東京都千代田区麹町にある自宅マンション
-発見者は松伏弦徳巡査部長、そして樋川の住むマンションの大家である。死因は急性出血性ショック死。暴行の痕などは無く、扉の鍵にピッキングした痕跡も無かった。
-指紋を拭きとった後は無く、凶器である刃物に関しても持ち方からして全て『自殺』であることを物語っていた。
-所持品や写真などは署内にて補完している。
-現場に残されたスマートフォンは樋川自身の者であり、動画に関しては犯人がハッキングしてそのスマートフォンから録画したのだとされている。
-サーバーを複数経由している為、足取りを追う事が出来ない。
-遺体はN大学病院にて安置されており、解剖も全て終了している。
-解剖の結果を見ても他殺の線は考えられず、やはり自殺であると断定された。</p>
+<p>&#x4F55;&#x6545;&#x304B;&#x30A8;&#x30A2;&#x30B3;&#x30F3;&#x306F;&#x6696;&#x623F;&#x3067;&#x5165;&#x3063;&#x305F;&#x307E;&#x307E;&#x306B;&#x306A;&#x3063;&#x3066;&#x304A;&#x308A;&#x3001;&#x5F53;&#x521D;&#x306F;&#x8150;&#x6557;&#x3092;&#x65E9;&#x3081;&#x308B;&#x70BA;&#x3001;&#x7B2C;&#x4E09;&#x8005;&#x304C;&#x624B;&#x3092;&#x52A0;&#x3048;&#x305F;&#x3082;&#x306E;&#x3068;&#x8003;&#x3048;&#x3089;&#x308C;&#x305F;&#x304C;&#x6307;&#x7D0B;&#x306E;&#x4ED8;&#x304D;&#x65B9;&#x7B49;&#x304B;&#x3089;&#x672C;&#x4EBA;&#x304C;&#x6B7B;&#x306C;&#x524D;&#x306B;&#x4ED8;&#x3051;&#x305F;&#x306E;&#x3060;&#x3068;&#x65AD;&#x5B9A;&#x3055;&#x308C;&#x305F;&#x3002;<br>
+&#x6B7B;&#x4F53;&#x767A;&#x898B;&#x73FE;&#x5834;&#x306F;&#x6771;&#x4EAC;&#x90FD;&#x5343;&#x4EE3;&#x7530;&#x533A;&#x9EB9;&#x753A;&#x306B;&#x3042;&#x308B;&#x81EA;&#x5B85;&#x30DE;&#x30F3;&#x30B7;&#x30E7;&#x30F3;<br>
+&#x767A;&#x898B;&#x8005;&#x306F;&#x677E;&#x4F0F;&#x5F26;&#x5FB3;&#x5DE1;&#x67FB;&#x90E8;&#x9577;&#x3001;&#x305D;&#x3057;&#x3066;&#x6A0B;&#x5DDD;&#x306E;&#x4F4F;&#x3080;&#x30DE;&#x30F3;&#x30B7;&#x30E7;&#x30F3;&#x306E;&#x5927;&#x5BB6;&#x3067;&#x3042;&#x308B;&#x3002;&#x6B7B;&#x56E0;&#x306F;&#x6025;&#x6027;&#x51FA;&#x8840;&#x6027;&#x30B7;&#x30E7;&#x30C3;&#x30AF;&#x6B7B;&#x3002;&#x66B4;&#x884C;&#x306E;&#x75D5;&#x306A;&#x3069;&#x306F;&#x7121;&#x304F;&#x3001;&#x6249;&#x306E;&#x9375;&#x306B;&#x30D4;&#x30C3;&#x30AD;&#x30F3;&#x30B0;&#x3057;&#x305F;&#x75D5;&#x8DE1;&#x3082;&#x7121;&#x304B;&#x3063;&#x305F;&#x3002;<br>
+&#x6307;&#x7D0B;&#x3092;&#x62ED;&#x304D;&#x3068;&#x3063;&#x305F;&#x5F8C;&#x306F;&#x7121;&#x304F;&#x3001;&#x51F6;&#x5668;&#x3067;&#x3042;&#x308B;&#x5203;&#x7269;&#x306B;&#x95A2;&#x3057;&#x3066;&#x3082;&#x6301;&#x3061;&#x65B9;&#x304B;&#x3089;&#x3057;&#x3066;&#x5168;&#x3066;&#x300E;&#x81EA;&#x6BBA;&#x300F;&#x3067;&#x3042;&#x308B;&#x3053;&#x3068;&#x3092;&#x7269;&#x8A9E;&#x3063;&#x3066;&#x3044;&#x305F;&#x3002;<br>
+&#x6240;&#x6301;&#x54C1;&#x3084;&#x5199;&#x771F;&#x306A;&#x3069;&#x306F;&#x7F72;&#x5185;&#x306B;&#x3066;&#x88DC;&#x5B8C;&#x3057;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x73FE;&#x5834;&#x306B;&#x6B8B;&#x3055;&#x308C;&#x305F;&#x30B9;&#x30DE;&#x30FC;&#x30C8;&#x30D5;&#x30A9;&#x30F3;&#x306F;&#x6A0B;&#x5DDD;&#x81EA;&#x8EAB;&#x306E;&#x8005;&#x3067;&#x3042;&#x308A;&#x3001;&#x52D5;&#x753B;&#x306B;&#x95A2;&#x3057;&#x3066;&#x306F;&#x72AF;&#x4EBA;&#x304C;&#x30CF;&#x30C3;&#x30AD;&#x30F3;&#x30B0;&#x3057;&#x3066;&#x305D;&#x306E;&#x30B9;&#x30DE;&#x30FC;&#x30C8;&#x30D5;&#x30A9;&#x30F3;&#x304B;&#x3089;&#x9332;&#x753B;&#x3057;&#x305F;&#x306E;&#x3060;&#x3068;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x30B5;&#x30FC;&#x30D0;&#x30FC;&#x3092;&#x8907;&#x6570;&#x7D4C;&#x7531;&#x3057;&#x3066;&#x3044;&#x308B;&#x70BA;&#x3001;&#x8DB3;&#x53D6;&#x308A;&#x3092;&#x8FFD;&#x3046;&#x4E8B;&#x304C;&#x51FA;&#x6765;&#x306A;&#x3044;&#x3002;<br>
+&#x907A;&#x4F53;&#x306F;N&#x5927;&#x5B66;&#x75C5;&#x9662;&#x306B;&#x3066;&#x5B89;&#x7F6E;&#x3055;&#x308C;&#x3066;&#x304A;&#x308A;&#x3001;&#x89E3;&#x5256;&#x3082;&#x5168;&#x3066;&#x7D42;&#x4E86;&#x3057;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x89E3;&#x5256;&#x306E;&#x7D50;&#x679C;&#x3092;&#x898B;&#x3066;&#x3082;&#x4ED6;&#x6BBA;&#x306E;&#x7DDA;&#x306F;&#x8003;&#x3048;&#x3089;&#x308C;&#x305A;&#x3001;&#x3084;&#x306F;&#x308A;&#x81EA;&#x6BBA;&#x3067;&#x3042;&#x308B;&#x3068;&#x65AD;&#x5B9A;&#x3055;&#x308C;&#x305F;&#x3002;</p>
 </blockquote>
-<h3 id="%E9%8C%B2%E9%9F%B3%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8">録音メッセージ</h3>
+<h3 class="mume-header" id="%E9%8C%B2%E9%9F%B3%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8">&#x9332;&#x97F3;&#x30E1;&#x30C3;&#x30BB;&#x30FC;&#x30B8;</h3>
+
 <blockquote>
-<p>あれは……呪いだ
-けして……
-……す</p>
+<p>&#x3042;&#x308C;&#x306F;&#x2026;&#x2026;&#x546A;&#x3044;&#x3060;<br>
+&#x3051;&#x3057;&#x3066;&#x2026;&#x2026;<br>
+&#x2026;&#x2026;&#x3059;</p>
 </blockquote>
-<h2 id="%E9%81%BA%E5%93%81">遺品</h2>
-<h3 id="ipad%E3%81%AE%E6%97%A5%E8%A8%98">ipadの日記</h3>
+<h2 class="mume-header" id="%E9%81%BA%E5%93%81">&#x907A;&#x54C1;</h2>
+
+<h3 class="mume-header" id="ipad%E3%81%AE%E6%97%A5%E8%A8%98">ipad&#x306E;&#x65E5;&#x8A18;</h3>
+
 <table>
 <thead>
 <tr>
-<th>日付</th>
-<th>内容</th>
+<th>&#x65E5;&#x4ED8;</th>
+<th>&#x5185;&#x5BB9;</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>(一年前)</td>
+<td>(&#x4E00;&#x5E74;&#x524D;)</td>
 <td></td>
 </tr>
 <tr>
-<td>〇月△日</td>
-<td>日々の記録として記載。</td>
+<td>&#x3007;&#x6708;&#x25B3;&#x65E5;</td>
+<td>&#x65E5;&#x3005;&#x306E;&#x8A18;&#x9332;&#x3068;&#x3057;&#x3066;&#x8A18;&#x8F09;&#x3002;</td>
 </tr>
 <tr>
-<td>□月□日</td>
-<td>資料閲覧＞国立国会図書館。</td>
+<td>&#x25A1;&#x6708;&#x25A1;&#x65E5;</td>
+<td>&#x8CC7;&#x6599;&#x95B2;&#x89A7;&#xFF1E;&#x56FD;&#x7ACB;&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;&#x3002;</td>
 </tr>
 <tr>
-<td>△月□日</td>
-<td>F/D、状況的証拠不十分。</td>
+<td>&#x25B3;&#x6708;&#x25A1;&#x65E5;</td>
+<td>F/D&#x3001;&#x72B6;&#x6CC1;&#x7684;&#x8A3C;&#x62E0;&#x4E0D;&#x5341;&#x5206;&#x3002;</td>
 </tr>
 <tr>
-<td>〇月△日</td>
-<td>T/D、黙秘<br/>元より我々に何かを言う気もないのだろう。</td>
+<td>&#x3007;&#x6708;&#x25B3;&#x65E5;</td>
+<td>T/D&#x3001;&#x9ED9;&#x79D8;<br>&#x5143;&#x3088;&#x308A;&#x6211;&#x3005;&#x306B;&#x4F55;&#x304B;&#x3092;&#x8A00;&#x3046;&#x6C17;&#x3082;&#x306A;&#x3044;&#x306E;&#x3060;&#x308D;&#x3046;&#x3002;</td>
 </tr>
 <tr>
-<td>〇月×日</td>
-<td>T/D、メモ<br/>「然るべき人間には伝えた」＞誰かに真実を話したということか<br/>その後は黙秘、ただ笑っていた。</td>
-</tr>
-<tr>
-<td></td>
-<td>……似たような記述が続くが、進展は無いようだ。</td>
-</tr>
-<tr>
-<td>(先月)</td>
-<td></td>
-</tr>
-<tr>
-<td>△月△日</td>
-<td>犯罪の芽は抜かりなく潰す必要がある。<br/>何かが起きてから動くだけでは、何の解決にもならない。<br/>犯罪は感染病のようなものだ。</td>
-</tr>
-<tr>
-<td>△月×日(先月の15日)</td>
-<td>T/D Dead<br/>余計に掴めなくなる</td>
-</tr>
-<tr>
-<td>△月〇日</td>
-<td>資料閲覧＞国立国会図書館<br/>懐かしい事件</td>
-</tr>
-<tr>
-<td>△月□日</td>
-<td>まだ刑事ではなかった頃の事件だ。<br/>このところよく思い出す。<br/>怪我の治療＞N大学病院<br/>似合わないなりに少しだけ世間話をした。</td>
-</tr>
-<tr>
-<td>△月◇日</td>
-<td>頭にこびりついて離れない<br/>舵取り、だからなんだ。</td>
-</tr>
-<tr>
-<td>△月▽日</td>
-<td>うるさい。だまれ。</td>
-</tr>
-<tr>
-<td>△月▲日</td>
-<td>果実、赤い、果実<br/>土<br/>温室<br/>早すぎた胎児</td>
+<td>&#x3007;&#x6708;&#xD7;&#x65E5;</td>
+<td>T/D&#x3001;&#x30E1;&#x30E2;<br>&#x300C;&#x7136;&#x308B;&#x3079;&#x304D;&#x4EBA;&#x9593;&#x306B;&#x306F;&#x4F1D;&#x3048;&#x305F;&#x300D;&#xFF1E;&#x8AB0;&#x304B;&#x306B;&#x771F;&#x5B9F;&#x3092;&#x8A71;&#x3057;&#x305F;&#x3068;&#x3044;&#x3046;&#x3053;&#x3068;&#x304B;<br>&#x305D;&#x306E;&#x5F8C;&#x306F;&#x9ED9;&#x79D8;&#x3001;&#x305F;&#x3060;&#x7B11;&#x3063;&#x3066;&#x3044;&#x305F;&#x3002;</td>
 </tr>
 <tr>
 <td></td>
-<td>……暫く不安定でネガティブな言葉、または容量を得ない言葉ばかりが続く</td>
+<td>&#x2026;&#x2026;&#x4F3C;&#x305F;&#x3088;&#x3046;&#x306A;&#x8A18;&#x8FF0;&#x304C;&#x7D9A;&#x304F;&#x304C;&#x3001;&#x9032;&#x5C55;&#x306F;&#x7121;&#x3044;&#x3088;&#x3046;&#x3060;&#x3002;</td>
 </tr>
 <tr>
-<td>(死亡直前)</td>
-<td>俺の中の正義を絶やすな。<br/>これは&quot;本物&quot;だ。</td>
+<td>(&#x5148;&#x6708;)</td>
+<td></td>
+</tr>
+<tr>
+<td>&#x25B3;&#x6708;&#x25B3;&#x65E5;</td>
+<td>&#x72AF;&#x7F6A;&#x306E;&#x82BD;&#x306F;&#x629C;&#x304B;&#x308A;&#x306A;&#x304F;&#x6F70;&#x3059;&#x5FC5;&#x8981;&#x304C;&#x3042;&#x308B;&#x3002;<br>&#x4F55;&#x304B;&#x304C;&#x8D77;&#x304D;&#x3066;&#x304B;&#x3089;&#x52D5;&#x304F;&#x3060;&#x3051;&#x3067;&#x306F;&#x3001;&#x4F55;&#x306E;&#x89E3;&#x6C7A;&#x306B;&#x3082;&#x306A;&#x3089;&#x306A;&#x3044;&#x3002;<br>&#x72AF;&#x7F6A;&#x306F;&#x611F;&#x67D3;&#x75C5;&#x306E;&#x3088;&#x3046;&#x306A;&#x3082;&#x306E;&#x3060;&#x3002;</td>
+</tr>
+<tr>
+<td>&#x25B3;&#x6708;&#xD7;&#x65E5;(&#x5148;&#x6708;&#x306E;15&#x65E5;)</td>
+<td>T/D Dead<br>&#x4F59;&#x8A08;&#x306B;&#x63B4;&#x3081;&#x306A;&#x304F;&#x306A;&#x308B;</td>
+</tr>
+<tr>
+<td>&#x25B3;&#x6708;&#x3007;&#x65E5;</td>
+<td>&#x8CC7;&#x6599;&#x95B2;&#x89A7;&#xFF1E;&#x56FD;&#x7ACB;&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;<br>&#x61D0;&#x304B;&#x3057;&#x3044;&#x4E8B;&#x4EF6;</td>
+</tr>
+<tr>
+<td>&#x25B3;&#x6708;&#x25A1;&#x65E5;</td>
+<td>&#x307E;&#x3060;&#x5211;&#x4E8B;&#x3067;&#x306F;&#x306A;&#x304B;&#x3063;&#x305F;&#x9803;&#x306E;&#x4E8B;&#x4EF6;&#x3060;&#x3002;<br>&#x3053;&#x306E;&#x3068;&#x3053;&#x308D;&#x3088;&#x304F;&#x601D;&#x3044;&#x51FA;&#x3059;&#x3002;<br>&#x602A;&#x6211;&#x306E;&#x6CBB;&#x7642;&#xFF1E;N&#x5927;&#x5B66;&#x75C5;&#x9662;<br>&#x4F3C;&#x5408;&#x308F;&#x306A;&#x3044;&#x306A;&#x308A;&#x306B;&#x5C11;&#x3057;&#x3060;&#x3051;&#x4E16;&#x9593;&#x8A71;&#x3092;&#x3057;&#x305F;&#x3002;</td>
+</tr>
+<tr>
+<td>&#x25B3;&#x6708;&#x25C7;&#x65E5;</td>
+<td>&#x982D;&#x306B;&#x3053;&#x3073;&#x308A;&#x3064;&#x3044;&#x3066;&#x96E2;&#x308C;&#x306A;&#x3044;<br>&#x8235;&#x53D6;&#x308A;&#x3001;&#x3060;&#x304B;&#x3089;&#x306A;&#x3093;&#x3060;&#x3002;</td>
+</tr>
+<tr>
+<td>&#x25B3;&#x6708;&#x25BD;&#x65E5;</td>
+<td>&#x3046;&#x308B;&#x3055;&#x3044;&#x3002;&#x3060;&#x307E;&#x308C;&#x3002;</td>
+</tr>
+<tr>
+<td>&#x25B3;&#x6708;&#x25B2;&#x65E5;</td>
+<td>&#x679C;&#x5B9F;&#x3001;&#x8D64;&#x3044;&#x3001;&#x679C;&#x5B9F;<br>&#x571F;<br>&#x6E29;&#x5BA4;<br>&#x65E9;&#x3059;&#x304E;&#x305F;&#x80CE;&#x5150;</td>
+</tr>
+<tr>
+<td></td>
+<td>&#x2026;&#x2026;&#x66AB;&#x304F;&#x4E0D;&#x5B89;&#x5B9A;&#x3067;&#x30CD;&#x30AC;&#x30C6;&#x30A3;&#x30D6;&#x306A;&#x8A00;&#x8449;&#x3001;&#x307E;&#x305F;&#x306F;&#x5BB9;&#x91CF;&#x3092;&#x5F97;&#x306A;&#x3044;&#x8A00;&#x8449;&#x3070;&#x304B;&#x308A;&#x304C;&#x7D9A;&#x304F;</td>
+</tr>
+<tr>
+<td>(&#x6B7B;&#x4EA1;&#x76F4;&#x524D;)</td>
+<td>&#x4FFA;&#x306E;&#x4E2D;&#x306E;&#x6B63;&#x7FA9;&#x3092;&#x7D76;&#x3084;&#x3059;&#x306A;&#x3002;<br>&#x3053;&#x308C;&#x306F;&quot;&#x672C;&#x7269;&quot;&#x3060;&#x3002;</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>資料閲覧＞国立国会図書館。</li>
-<li>これは&quot;本物&quot;だ　本物が強調されている　＝　True？</li>
+<li>&#x8CC7;&#x6599;&#x95B2;&#x89A7;&#xFF1E;&#x56FD;&#x7ACB;&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;&#x3002;</li>
+<li>&#x3053;&#x308C;&#x306F;&quot;&#x672C;&#x7269;&quot;&#x3060;&#x3000;&#x672C;&#x7269;&#x304C;&#x5F37;&#x8ABF;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3000;&#xFF1D;&#x3000;True&#xFF1F;</li>
 </ul>
-<h3 id="%E6%89%8B%E5%B8%B3">手帳</h3>
+<h3 class="mume-header" id="%E6%89%8B%E5%B8%B3">&#x624B;&#x5E33;</h3>
+
 <ul>
 <li>T/D/D</li>
 </ul>
-<h3 id="%E8%B2%A1%E5%B8%83">財布</h3>
+<h3 class="mume-header" id="%E8%B2%A1%E5%B8%83">&#x8CA1;&#x5E03;</h3>
+
 <ul>
-<li>運転免許証、診察カード、国立図書館の入館カード</li>
+<li>&#x904B;&#x8EE2;&#x514D;&#x8A31;&#x8A3C;&#x3001;&#x8A3A;&#x5BDF;&#x30AB;&#x30FC;&#x30C9;&#x3001;&#x56FD;&#x7ACB;&#x56F3;&#x66F8;&#x9928;&#x306E;&#x5165;&#x9928;&#x30AB;&#x30FC;&#x30C9;</li>
 </ul>
-<h3 id="%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8">国会図書館</h3>
+<h3 class="mume-header" id="%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8">&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;</h3>
+
 <ul>
-<li>一番でかい図書館　現地に行けば大量の本がある</li>
-<li>カードがなければダメ</li>
-<li>全ての操作を係員が行う</li>
-<li>閲覧履歴が見れる。</li>
+<li>&#x4E00;&#x756A;&#x3067;&#x304B;&#x3044;&#x56F3;&#x66F8;&#x9928;&#x3000;&#x73FE;&#x5730;&#x306B;&#x884C;&#x3051;&#x3070;&#x5927;&#x91CF;&#x306E;&#x672C;&#x304C;&#x3042;&#x308B;</li>
+<li>&#x30AB;&#x30FC;&#x30C9;&#x304C;&#x306A;&#x3051;&#x308C;&#x3070;&#x30C0;&#x30E1;</li>
+<li>&#x5168;&#x3066;&#x306E;&#x64CD;&#x4F5C;&#x3092;&#x4FC2;&#x54E1;&#x304C;&#x884C;&#x3046;</li>
+<li>&#x95B2;&#x89A7;&#x5C65;&#x6B74;&#x304C;&#x898B;&#x308C;&#x308B;&#x3002;</li>
 </ul>
-<h2 id="n%E5%A4%A7%E5%AD%A6">N大学</h2>
-<h3 id="%E9%81%BA%E4%BD%93">遺体</h3>
+<h2 class="mume-header" id="n%E5%A4%A7%E5%AD%A6">N&#x5927;&#x5B66;</h2>
+
+<h3 class="mume-header" id="%E9%81%BA%E4%BD%93">&#x907A;&#x4F53;</h3>
+
 <ul>
-<li>死斑とは異なる黒い斑点が頭に出ている
+<li>&#x6B7B;&#x6591;&#x3068;&#x306F;&#x7570;&#x306A;&#x308B;&#x9ED2;&#x3044;&#x6591;&#x70B9;&#x304C;&#x982D;&#x306B;&#x51FA;&#x3066;&#x3044;&#x308B;
 <ul>
-<li>死斑の場合は死後20分くらいにでる　座っていた状態で亡くなっていたので体の後ろ側（背中、尻、足）</li>
-</ul>
-</li>
-<li>目が黒く濁っている。医学的にはあまりない現象</li>
-<li>冷凍されているのに干からびている？</li>
-<li>急性出血性ショックが死因</li>
-<li>傷のつき方は間違いなく自殺</li>
-</ul>
-<h3 id="%E9%80%9A%E9%99%A2%E3%81%AE%E7%90%86%E7%94%B1">通院の理由</h3>
-<ul>
-<li>腕の怪我</li>
-</ul>
-<h2 id="%E7%8F%BE%E5%A0%B4%E3%81%A8%E8%81%9E%E3%81%8D%E8%BE%BC%E3%81%BF">現場と聞き込み</h2>
-<h3 id="%E6%99%AE%E6%AE%B5%E3%81%AE%E6%A7%98%E5%AD%90">普段の様子</h3>
-<ul>
-<li>真面目　決まった時間に起きていた　時計みたいなやつ</li>
-<li>事件前は不規則に家を出ていた</li>
-<li>朝遅いってことはまずない　遅刻まではしていない</li>
-</ul>
-<h3 id="%E7%97%85%E9%99%A2%E3%81%AB%E8%A1%8C%E3%81%A3%E3%81%9F%E3%81%A8%E3%81%8D">病院に行ったとき</h3>
-<ul>
-<li>病院に行ったときには少し話してくれた</li>
-<li>機嫌が良かった</li>
-<li>病院にかかるほどの怪我をしたのか？</li>
-</ul>
-<h3 id="%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">カレンダー</h3>
-<ul>
-<li>先月15日にバツ印</li>
-<li>誕生日ではない</li>
-</ul>
-<h2 id="%E6%9D%BE%E4%BC%8F%E9%96%A2%E9%80%A3">松伏関連</h2>
-<p>###　遺言</p>
-<ul>
-<li>カノープス
-<ul>
-<li>固有名詞を持たないギリシャ語</li>
-<li>なんとか座の星</li>
+<li>&#x6B7B;&#x6591;&#x306E;&#x5834;&#x5408;&#x306F;&#x6B7B;&#x5F8C;20&#x5206;&#x304F;&#x3089;&#x3044;&#x306B;&#x3067;&#x308B;&#x3000;&#x5EA7;&#x3063;&#x3066;&#x3044;&#x305F;&#x72B6;&#x614B;&#x3067;&#x4EA1;&#x304F;&#x306A;&#x3063;&#x3066;&#x3044;&#x305F;&#x306E;&#x3067;&#x4F53;&#x306E;&#x5F8C;&#x308D;&#x5074;&#xFF08;&#x80CC;&#x4E2D;&#x3001;&#x5C3B;&#x3001;&#x8DB3;&#xFF09;</li>
 </ul>
 </li>
+<li>&#x76EE;&#x304C;&#x9ED2;&#x304F;&#x6FC1;&#x3063;&#x3066;&#x3044;&#x308B;&#x3002;&#x533B;&#x5B66;&#x7684;&#x306B;&#x306F;&#x3042;&#x307E;&#x308A;&#x306A;&#x3044;&#x73FE;&#x8C61;</li>
+<li>&#x51B7;&#x51CD;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x306E;&#x306B;&#x5E72;&#x304B;&#x3089;&#x3073;&#x3066;&#x3044;&#x308B;&#xFF1F;</li>
+<li>&#x6025;&#x6027;&#x51FA;&#x8840;&#x6027;&#x30B7;&#x30E7;&#x30C3;&#x30AF;&#x304C;&#x6B7B;&#x56E0;</li>
+<li>&#x50B7;&#x306E;&#x3064;&#x304D;&#x65B9;&#x306F;&#x9593;&#x9055;&#x3044;&#x306A;&#x304F;&#x81EA;&#x6BBA;</li>
 </ul>
-<p>###　スマホ</p>
+<h3 class="mume-header" id="%E9%80%9A%E9%99%A2%E3%81%AE%E7%90%86%E7%94%B1">&#x901A;&#x9662;&#x306E;&#x7406;&#x7531;</h3>
+
 <ul>
-<li>ムービーが撮られていた</li>
-<li>容量が大きすぎて熱で電源落ちた</li>
+<li>&#x8155;&#x306E;&#x602A;&#x6211;</li>
 </ul>
-<p>###　遺体</p>
+<h2 class="mume-header" id="%E7%8F%BE%E5%A0%B4%E3%81%A8%E8%81%9E%E3%81%8D%E8%BE%BC%E3%81%BF">&#x73FE;&#x5834;&#x3068;&#x805E;&#x304D;&#x8FBC;&#x307F;</h2>
+
+<h3 class="mume-header" id="%E6%99%AE%E6%AE%B5%E3%81%AE%E6%A7%98%E5%AD%90">&#x666E;&#x6BB5;&#x306E;&#x69D8;&#x5B50;</h3>
+
 <ul>
-<li>大量の失血で土気色</li>
-<li>首の裏側に黒い斑点
+<li>&#x771F;&#x9762;&#x76EE;&#x3000;&#x6C7A;&#x307E;&#x3063;&#x305F;&#x6642;&#x9593;&#x306B;&#x8D77;&#x304D;&#x3066;&#x3044;&#x305F;&#x3000;&#x6642;&#x8A08;&#x307F;&#x305F;&#x3044;&#x306A;&#x3084;&#x3064;</li>
+<li>&#x4E8B;&#x4EF6;&#x524D;&#x306F;&#x4E0D;&#x898F;&#x5247;&#x306B;&#x5BB6;&#x3092;&#x51FA;&#x3066;&#x3044;&#x305F;</li>
+<li>&#x671D;&#x9045;&#x3044;&#x3063;&#x3066;&#x3053;&#x3068;&#x306F;&#x307E;&#x305A;&#x306A;&#x3044;&#x3000;&#x9045;&#x523B;&#x307E;&#x3067;&#x306F;&#x3057;&#x3066;&#x3044;&#x306A;&#x3044;</li>
+</ul>
+<h3 class="mume-header" id="%E7%97%85%E9%99%A2%E3%81%AB%E8%A1%8C%E3%81%A3%E3%81%9F%E3%81%A8%E3%81%8D">&#x75C5;&#x9662;&#x306B;&#x884C;&#x3063;&#x305F;&#x3068;&#x304D;</h3>
+
 <ul>
-<li>警察学校に入るまではなかった</li>
+<li>&#x75C5;&#x9662;&#x306B;&#x884C;&#x3063;&#x305F;&#x3068;&#x304D;&#x306B;&#x306F;&#x5C11;&#x3057;&#x8A71;&#x3057;&#x3066;&#x304F;&#x308C;&#x305F;</li>
+<li>&#x6A5F;&#x5ACC;&#x304C;&#x826F;&#x304B;&#x3063;&#x305F;</li>
+<li>&#x75C5;&#x9662;&#x306B;&#x304B;&#x304B;&#x308B;&#x307B;&#x3069;&#x306E;&#x602A;&#x6211;&#x3092;&#x3057;&#x305F;&#x306E;&#x304B;&#xFF1F;</li>
+</ul>
+<h3 class="mume-header" id="%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">&#x30AB;&#x30EC;&#x30F3;&#x30C0;&#x30FC;</h3>
+
+<ul>
+<li>&#x5148;&#x6708;15&#x65E5;&#x306B;&#x30D0;&#x30C4;&#x5370;</li>
+<li>&#x8A95;&#x751F;&#x65E5;&#x3067;&#x306F;&#x306A;&#x3044;</li>
+</ul>
+<h2 class="mume-header" id="%E6%9D%BE%E4%BC%8F%E9%96%A2%E9%80%A3">&#x677E;&#x4F0F;&#x95A2;&#x9023;</h2>
+
+<h3 class="mume-header" id="%E9%81%BA%E8%A8%80">&#x907A;&#x8A00;</h3>
+
+<ul>
+<li>&#x30AB;&#x30CE;&#x30FC;&#x30D7;&#x30B9;
+<ul>
+<li>&#x56FA;&#x6709;&#x540D;&#x8A5E;&#x3092;&#x6301;&#x305F;&#x306A;&#x3044;&#x30AE;&#x30EA;&#x30B7;&#x30E3;&#x8A9E;</li>
+<li>&#x306A;&#x3093;&#x3068;&#x304B;&#x5EA7;&#x306E;&#x661F;</li>
 </ul>
 </li>
 </ul>
-<p>###　遺品</p>
+<h3 class="mume-header" id="%E3%82%B9%E3%83%9E%E3%83%9B">&#x30B9;&#x30DE;&#x30DB;</h3>
+
 <ul>
-<li>国立国家図書館</li>
-<li>自宅の鍵</li>
-<li>どこかの部屋の鍵？</li>
+<li>&#x30E0;&#x30FC;&#x30D3;&#x30FC;&#x304C;&#x64AE;&#x3089;&#x308C;&#x3066;&#x3044;&#x305F;</li>
+<li>&#x5BB9;&#x91CF;&#x304C;&#x5927;&#x304D;&#x3059;&#x304E;&#x3066;&#x71B1;&#x3067;&#x96FB;&#x6E90;&#x843D;&#x3061;&#x305F;</li>
 </ul>
-<h2 id="%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%83%A8%E5%B1%8B">松伏の部屋</h2>
+<h3 class="mume-header" id="%E9%81%BA%E4%BD%93-1">&#x907A;&#x4F53;</h3>
+
 <ul>
-<li>神経質な部屋</li>
-<li>寝室には鍵</li>
+<li>&#x5927;&#x91CF;&#x306E;&#x5931;&#x8840;&#x3067;&#x571F;&#x6C17;&#x8272;</li>
+<li>&#x9996;&#x306E;&#x88CF;&#x5074;&#x306B;&#x9ED2;&#x3044;&#x6591;&#x70B9;
+<ul>
+<li>&#x8B66;&#x5BDF;&#x5B66;&#x6821;&#x306B;&#x5165;&#x308B;&#x307E;&#x3067;&#x306F;&#x306A;&#x304B;&#x3063;&#x305F;</li>
 </ul>
-<h3 id="%E6%96%B0%E8%81%9E%E8%A8%98%E4%BA%8B-%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%81%8E%E5%8E%BB">新聞記事　松伏の過去</h3>
+</li>
+</ul>
+<h3 class="mume-header" id="%E9%81%BA%E5%93%81-1">&#x907A;&#x54C1;</h3>
+
+<ul>
+<li>&#x56FD;&#x7ACB;&#x56FD;&#x5BB6;&#x56F3;&#x66F8;&#x9928;</li>
+<li>&#x81EA;&#x5B85;&#x306E;&#x9375;</li>
+<li>&#x3069;&#x3053;&#x304B;&#x306E;&#x90E8;&#x5C4B;&#x306E;&#x9375;&#xFF1F;</li>
+</ul>
+<h2 class="mume-header" id="%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%83%A8%E5%B1%8B">&#x677E;&#x4F0F;&#x306E;&#x90E8;&#x5C4B;</h2>
+
+<ul>
+<li>&#x795E;&#x7D4C;&#x8CEA;&#x306A;&#x90E8;&#x5C4B;</li>
+<li>&#x5BDD;&#x5BA4;&#x306B;&#x306F;&#x9375;</li>
+</ul>
+<h3 class="mume-header" id="%E6%96%B0%E8%81%9E%E8%A8%98%E4%BA%8B-%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%81%8E%E5%8E%BB">&#x65B0;&#x805E;&#x8A18;&#x4E8B;&#x3000;&#x677E;&#x4F0F;&#x306E;&#x904E;&#x53BB;</h3>
+
 <blockquote>
-<p>某日、弦徳くんと同級生らが数人、現場となった廃墟でかくれんぼをしていた。
-弦徳くんは鬼の役回りとなり、廃墟内の友人を見つけては一階の出入口で待つように告げたという。
-廃墟の屋上はロッカーも何もない、隠れる場所がない場所だったが、探しておいて損はないと屋上へ向かったらしい。
-屋上の扉に手をかけた時、人の声が聞こえたという。
-きっと同級生が二人ほど隠れていて、誰も探しに来ないだろうと話している声だと弦徳くんは思ったようだ。
-逆に驚かせたやろうと、こっそり扉を開ければ赤い血が目の前に広がっていたという。
-人の声は犯行を行う雨宮貴理絵の悍ましい発言と、痛みに耐え命乞いをする被害者のものだった。
-被害者の男性は一瞬弦徳くんと目が合ったようだが、すぐに反らし、命乞いを止めて呻くだけだったようだ。
-弦徳くんは屋上の中には入らず、静かに扉を閉め、後は夢中で駆け出したという。
-その階段を降りる音を聞きつけ、隠れていた同級生たちも彼を追い、全員で廃墟を後にしたらしい。</p>
-<p>弦徳くんは近くの交番にすぐさま転がり込み通報。
-雨宮貴理絵は現行犯逮捕となったが、被害者の男性は既に事切れていた。</p>
+<p>&#x67D0;&#x65E5;&#x3001;&#x5F26;&#x5FB3;&#x304F;&#x3093;&#x3068;&#x540C;&#x7D1A;&#x751F;&#x3089;&#x304C;&#x6570;&#x4EBA;&#x3001;&#x73FE;&#x5834;&#x3068;&#x306A;&#x3063;&#x305F;&#x5EC3;&#x589F;&#x3067;&#x304B;&#x304F;&#x308C;&#x3093;&#x307C;&#x3092;&#x3057;&#x3066;&#x3044;&#x305F;&#x3002;<br>
+&#x5F26;&#x5FB3;&#x304F;&#x3093;&#x306F;&#x9B3C;&#x306E;&#x5F79;&#x56DE;&#x308A;&#x3068;&#x306A;&#x308A;&#x3001;&#x5EC3;&#x589F;&#x5185;&#x306E;&#x53CB;&#x4EBA;&#x3092;&#x898B;&#x3064;&#x3051;&#x3066;&#x306F;&#x4E00;&#x968E;&#x306E;&#x51FA;&#x5165;&#x53E3;&#x3067;&#x5F85;&#x3064;&#x3088;&#x3046;&#x306B;&#x544A;&#x3052;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x5EC3;&#x589F;&#x306E;&#x5C4B;&#x4E0A;&#x306F;&#x30ED;&#x30C3;&#x30AB;&#x30FC;&#x3082;&#x4F55;&#x3082;&#x306A;&#x3044;&#x3001;&#x96A0;&#x308C;&#x308B;&#x5834;&#x6240;&#x304C;&#x306A;&#x3044;&#x5834;&#x6240;&#x3060;&#x3063;&#x305F;&#x304C;&#x3001;&#x63A2;&#x3057;&#x3066;&#x304A;&#x3044;&#x3066;&#x640D;&#x306F;&#x306A;&#x3044;&#x3068;&#x5C4B;&#x4E0A;&#x3078;&#x5411;&#x304B;&#x3063;&#x305F;&#x3089;&#x3057;&#x3044;&#x3002;<br>
+&#x5C4B;&#x4E0A;&#x306E;&#x6249;&#x306B;&#x624B;&#x3092;&#x304B;&#x3051;&#x305F;&#x6642;&#x3001;&#x4EBA;&#x306E;&#x58F0;&#x304C;&#x805E;&#x3053;&#x3048;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x304D;&#x3063;&#x3068;&#x540C;&#x7D1A;&#x751F;&#x304C;&#x4E8C;&#x4EBA;&#x307B;&#x3069;&#x96A0;&#x308C;&#x3066;&#x3044;&#x3066;&#x3001;&#x8AB0;&#x3082;&#x63A2;&#x3057;&#x306B;&#x6765;&#x306A;&#x3044;&#x3060;&#x308D;&#x3046;&#x3068;&#x8A71;&#x3057;&#x3066;&#x3044;&#x308B;&#x58F0;&#x3060;&#x3068;&#x5F26;&#x5FB3;&#x304F;&#x3093;&#x306F;&#x601D;&#x3063;&#x305F;&#x3088;&#x3046;&#x3060;&#x3002;<br>
+&#x9006;&#x306B;&#x9A5A;&#x304B;&#x305B;&#x305F;&#x3084;&#x308D;&#x3046;&#x3068;&#x3001;&#x3053;&#x3063;&#x305D;&#x308A;&#x6249;&#x3092;&#x958B;&#x3051;&#x308C;&#x3070;&#x8D64;&#x3044;&#x8840;&#x304C;&#x76EE;&#x306E;&#x524D;&#x306B;&#x5E83;&#x304C;&#x3063;&#x3066;&#x3044;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x4EBA;&#x306E;&#x58F0;&#x306F;&#x72AF;&#x884C;&#x3092;&#x884C;&#x3046;&#x96E8;&#x5BAE;&#x8CB4;&#x7406;&#x7D75;&#x306E;&#x608D;&#x307E;&#x3057;&#x3044;&#x767A;&#x8A00;&#x3068;&#x3001;&#x75DB;&#x307F;&#x306B;&#x8010;&#x3048;&#x547D;&#x4E5E;&#x3044;&#x3092;&#x3059;&#x308B;&#x88AB;&#x5BB3;&#x8005;&#x306E;&#x3082;&#x306E;&#x3060;&#x3063;&#x305F;&#x3002;<br>
+&#x88AB;&#x5BB3;&#x8005;&#x306E;&#x7537;&#x6027;&#x306F;&#x4E00;&#x77AC;&#x5F26;&#x5FB3;&#x304F;&#x3093;&#x3068;&#x76EE;&#x304C;&#x5408;&#x3063;&#x305F;&#x3088;&#x3046;&#x3060;&#x304C;&#x3001;&#x3059;&#x3050;&#x306B;&#x53CD;&#x3089;&#x3057;&#x3001;&#x547D;&#x4E5E;&#x3044;&#x3092;&#x6B62;&#x3081;&#x3066;&#x547B;&#x304F;&#x3060;&#x3051;&#x3060;&#x3063;&#x305F;&#x3088;&#x3046;&#x3060;&#x3002;<br>
+&#x5F26;&#x5FB3;&#x304F;&#x3093;&#x306F;&#x5C4B;&#x4E0A;&#x306E;&#x4E2D;&#x306B;&#x306F;&#x5165;&#x3089;&#x305A;&#x3001;&#x9759;&#x304B;&#x306B;&#x6249;&#x3092;&#x9589;&#x3081;&#x3001;&#x5F8C;&#x306F;&#x5922;&#x4E2D;&#x3067;&#x99C6;&#x3051;&#x51FA;&#x3057;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x305D;&#x306E;&#x968E;&#x6BB5;&#x3092;&#x964D;&#x308A;&#x308B;&#x97F3;&#x3092;&#x805E;&#x304D;&#x3064;&#x3051;&#x3001;&#x96A0;&#x308C;&#x3066;&#x3044;&#x305F;&#x540C;&#x7D1A;&#x751F;&#x305F;&#x3061;&#x3082;&#x5F7C;&#x3092;&#x8FFD;&#x3044;&#x3001;&#x5168;&#x54E1;&#x3067;&#x5EC3;&#x589F;&#x3092;&#x5F8C;&#x306B;&#x3057;&#x305F;&#x3089;&#x3057;&#x3044;&#x3002;</p>
+<p>&#x5F26;&#x5FB3;&#x304F;&#x3093;&#x306F;&#x8FD1;&#x304F;&#x306E;&#x4EA4;&#x756A;&#x306B;&#x3059;&#x3050;&#x3055;&#x307E;&#x8EE2;&#x304C;&#x308A;&#x8FBC;&#x307F;&#x901A;&#x5831;&#x3002;<br>
+&#x96E8;&#x5BAE;&#x8CB4;&#x7406;&#x7D75;&#x306F;&#x73FE;&#x884C;&#x72AF;&#x902E;&#x6355;&#x3068;&#x306A;&#x3063;&#x305F;&#x304C;&#x3001;&#x88AB;&#x5BB3;&#x8005;&#x306E;&#x7537;&#x6027;&#x306F;&#x65E2;&#x306B;&#x4E8B;&#x5207;&#x308C;&#x3066;&#x3044;&#x305F;&#x3002;</p>
 </blockquote>
 <ul>
-<li>犯行の様子が松伏の自傷の内容に酷似している</li>
-<li>樋川も何か真似した過去の事件があるのでは</li>
-<li>雨宮の死刑は執行済み</li>
+<li>&#x72AF;&#x884C;&#x306E;&#x69D8;&#x5B50;&#x304C;&#x677E;&#x4F0F;&#x306E;&#x81EA;&#x50B7;&#x306E;&#x5185;&#x5BB9;&#x306B;&#x9177;&#x4F3C;&#x3057;&#x3066;&#x3044;&#x308B;</li>
+<li>&#x6A0B;&#x5DDD;&#x3082;&#x4F55;&#x304B;&#x771F;&#x4F3C;&#x3057;&#x305F;&#x904E;&#x53BB;&#x306E;&#x4E8B;&#x4EF6;&#x304C;&#x3042;&#x308B;&#x306E;&#x3067;&#x306F;</li>
+<li>&#x96E8;&#x5BAE;&#x306E;&#x6B7B;&#x5211;&#x306F;&#x57F7;&#x884C;&#x6E08;&#x307F;</li>
 </ul>
-<h2 id="%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8">国会図書館</h2>
-<h3 id="%E7%8A%AF%E7%BD%AA%E3%81%AE%E3%82%84%E3%81%A4">犯罪のやつ</h3>
+<h2 class="mume-header" id="%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8-1">&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;</h2>
+
+<h3 class="mume-header" id="%E7%8A%AF%E7%BD%AA%E3%81%AE%E3%82%84%E3%81%A4">&#x72AF;&#x7F6A;&#x306E;&#x3084;&#x3064;</h3>
+
 <blockquote>
-<p>犯罪者たちは常に知識や経験を得て犯罪行為自体を進化させていくという『上達』を見せてくる。
-注意喚起をするマスメディア、過去の捜査を教訓により高度な犯罪に対策しようとする警察組織の書物。
-それらは現在、簡単に手に入れる事が出来、読んで学ぶことも可能である。
-そうしたものを一般人らが手にし、知るという事には何ら問題はないのかもしれないが、元々精神病質を抱える人間(この場合は犯罪傾向の強い人間)が読んだ場合はまた違うリスクが発生する。
-犯罪行為が上達し、手練れていくのである。徐々にその方法や証拠すらも追うのが難しくなるほどに。
-ある作家は、『内なる混沌(カオス)を身に溜めすぎない為に創作をしている』『創作をしなければ内側から汚染されて気が狂う』と言っている。
-それと同様に、彼らもまた内側に蔓延る歪んだ空想の逃がし口として『犯罪行為』に手を染めているだけかもしれない。(勿論それが許されるものではないが)</p>
-<p>シリアルキラーである塩谷修一の発言でもこれは顕著に表れているかもしれない。
-「ただ、その顔が欲しかった」
-殺しという概念に何の躊躇いもなく、その結果や過程、シチュエーションにただただこだわっている。現に彼の起こした4件の事件を見てもその上達が伺えた。
-ただし最後の事件に関しては少々の雑感は残ったようで、本人も4件目に関しては曖昧な証言を繰り返している。望む理想を作り上げられなかったからだろう。
-「ただ、そうしたかった」という短絡的な言葉に憤りを覚えるかもしれないが、慎ましく生きる世の人間でも「そうしたい」という細やかな欲望はある筈だ。
-欲望や好奇心とは恐ろしいもので、正気を失わせるだけの力を十分に育ててしまう。
-狂気と正気の境は曖昧である。
-得た知識に対してどう感じ取るかでその境界はいくらでも近づいてしまう。</p>
+<p>&#x72AF;&#x7F6A;&#x8005;&#x305F;&#x3061;&#x306F;&#x5E38;&#x306B;&#x77E5;&#x8B58;&#x3084;&#x7D4C;&#x9A13;&#x3092;&#x5F97;&#x3066;&#x72AF;&#x7F6A;&#x884C;&#x70BA;&#x81EA;&#x4F53;&#x3092;&#x9032;&#x5316;&#x3055;&#x305B;&#x3066;&#x3044;&#x304F;&#x3068;&#x3044;&#x3046;&#x300E;&#x4E0A;&#x9054;&#x300F;&#x3092;&#x898B;&#x305B;&#x3066;&#x304F;&#x308B;&#x3002;<br>
+&#x6CE8;&#x610F;&#x559A;&#x8D77;&#x3092;&#x3059;&#x308B;&#x30DE;&#x30B9;&#x30E1;&#x30C7;&#x30A3;&#x30A2;&#x3001;&#x904E;&#x53BB;&#x306E;&#x635C;&#x67FB;&#x3092;&#x6559;&#x8A13;&#x306B;&#x3088;&#x308A;&#x9AD8;&#x5EA6;&#x306A;&#x72AF;&#x7F6A;&#x306B;&#x5BFE;&#x7B56;&#x3057;&#x3088;&#x3046;&#x3068;&#x3059;&#x308B;&#x8B66;&#x5BDF;&#x7D44;&#x7E54;&#x306E;&#x66F8;&#x7269;&#x3002;<br>
+&#x305D;&#x308C;&#x3089;&#x306F;&#x73FE;&#x5728;&#x3001;&#x7C21;&#x5358;&#x306B;&#x624B;&#x306B;&#x5165;&#x308C;&#x308B;&#x4E8B;&#x304C;&#x51FA;&#x6765;&#x3001;&#x8AAD;&#x3093;&#x3067;&#x5B66;&#x3076;&#x3053;&#x3068;&#x3082;&#x53EF;&#x80FD;&#x3067;&#x3042;&#x308B;&#x3002;<br>
+&#x305D;&#x3046;&#x3057;&#x305F;&#x3082;&#x306E;&#x3092;&#x4E00;&#x822C;&#x4EBA;&#x3089;&#x304C;&#x624B;&#x306B;&#x3057;&#x3001;&#x77E5;&#x308B;&#x3068;&#x3044;&#x3046;&#x4E8B;&#x306B;&#x306F;&#x4F55;&#x3089;&#x554F;&#x984C;&#x306F;&#x306A;&#x3044;&#x306E;&#x304B;&#x3082;&#x3057;&#x308C;&#x306A;&#x3044;&#x304C;&#x3001;&#x5143;&#x3005;&#x7CBE;&#x795E;&#x75C5;&#x8CEA;&#x3092;&#x62B1;&#x3048;&#x308B;&#x4EBA;&#x9593;(&#x3053;&#x306E;&#x5834;&#x5408;&#x306F;&#x72AF;&#x7F6A;&#x50BE;&#x5411;&#x306E;&#x5F37;&#x3044;&#x4EBA;&#x9593;)&#x304C;&#x8AAD;&#x3093;&#x3060;&#x5834;&#x5408;&#x306F;&#x307E;&#x305F;&#x9055;&#x3046;&#x30EA;&#x30B9;&#x30AF;&#x304C;&#x767A;&#x751F;&#x3059;&#x308B;&#x3002;<br>
+&#x72AF;&#x7F6A;&#x884C;&#x70BA;&#x304C;&#x4E0A;&#x9054;&#x3057;&#x3001;&#x624B;&#x7DF4;&#x308C;&#x3066;&#x3044;&#x304F;&#x306E;&#x3067;&#x3042;&#x308B;&#x3002;&#x5F90;&#x3005;&#x306B;&#x305D;&#x306E;&#x65B9;&#x6CD5;&#x3084;&#x8A3C;&#x62E0;&#x3059;&#x3089;&#x3082;&#x8FFD;&#x3046;&#x306E;&#x304C;&#x96E3;&#x3057;&#x304F;&#x306A;&#x308B;&#x307B;&#x3069;&#x306B;&#x3002;<br>
+&#x3042;&#x308B;&#x4F5C;&#x5BB6;&#x306F;&#x3001;&#x300E;&#x5185;&#x306A;&#x308B;&#x6DF7;&#x6C8C;(&#x30AB;&#x30AA;&#x30B9;)&#x3092;&#x8EAB;&#x306B;&#x6E9C;&#x3081;&#x3059;&#x304E;&#x306A;&#x3044;&#x70BA;&#x306B;&#x5275;&#x4F5C;&#x3092;&#x3057;&#x3066;&#x3044;&#x308B;&#x300F;&#x300E;&#x5275;&#x4F5C;&#x3092;&#x3057;&#x306A;&#x3051;&#x308C;&#x3070;&#x5185;&#x5074;&#x304B;&#x3089;&#x6C5A;&#x67D3;&#x3055;&#x308C;&#x3066;&#x6C17;&#x304C;&#x72C2;&#x3046;&#x300F;&#x3068;&#x8A00;&#x3063;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x305D;&#x308C;&#x3068;&#x540C;&#x69D8;&#x306B;&#x3001;&#x5F7C;&#x3089;&#x3082;&#x307E;&#x305F;&#x5185;&#x5074;&#x306B;&#x8513;&#x5EF6;&#x308B;&#x6B6A;&#x3093;&#x3060;&#x7A7A;&#x60F3;&#x306E;&#x9003;&#x304C;&#x3057;&#x53E3;&#x3068;&#x3057;&#x3066;&#x300E;&#x72AF;&#x7F6A;&#x884C;&#x70BA;&#x300F;&#x306B;&#x624B;&#x3092;&#x67D3;&#x3081;&#x3066;&#x3044;&#x308B;&#x3060;&#x3051;&#x304B;&#x3082;&#x3057;&#x308C;&#x306A;&#x3044;&#x3002;(&#x52FF;&#x8AD6;&#x305D;&#x308C;&#x304C;&#x8A31;&#x3055;&#x308C;&#x308B;&#x3082;&#x306E;&#x3067;&#x306F;&#x306A;&#x3044;&#x304C;)</p>
+<p>&#x30B7;&#x30EA;&#x30A2;&#x30EB;&#x30AD;&#x30E9;&#x30FC;&#x3067;&#x3042;&#x308B;&#x5869;&#x8C37;&#x4FEE;&#x4E00;&#x306E;&#x767A;&#x8A00;&#x3067;&#x3082;&#x3053;&#x308C;&#x306F;&#x9855;&#x8457;&#x306B;&#x8868;&#x308C;&#x3066;&#x3044;&#x308B;&#x304B;&#x3082;&#x3057;&#x308C;&#x306A;&#x3044;&#x3002;<br>
+&#x300C;&#x305F;&#x3060;&#x3001;&#x305D;&#x306E;&#x9854;&#x304C;&#x6B32;&#x3057;&#x304B;&#x3063;&#x305F;&#x300D;<br>
+&#x6BBA;&#x3057;&#x3068;&#x3044;&#x3046;&#x6982;&#x5FF5;&#x306B;&#x4F55;&#x306E;&#x8E8A;&#x8E87;&#x3044;&#x3082;&#x306A;&#x304F;&#x3001;&#x305D;&#x306E;&#x7D50;&#x679C;&#x3084;&#x904E;&#x7A0B;&#x3001;&#x30B7;&#x30C1;&#x30E5;&#x30A8;&#x30FC;&#x30B7;&#x30E7;&#x30F3;&#x306B;&#x305F;&#x3060;&#x305F;&#x3060;&#x3053;&#x3060;&#x308F;&#x3063;&#x3066;&#x3044;&#x308B;&#x3002;&#x73FE;&#x306B;&#x5F7C;&#x306E;&#x8D77;&#x3053;&#x3057;&#x305F;4&#x4EF6;&#x306E;&#x4E8B;&#x4EF6;&#x3092;&#x898B;&#x3066;&#x3082;&#x305D;&#x306E;&#x4E0A;&#x9054;&#x304C;&#x4F3A;&#x3048;&#x305F;&#x3002;<br>
+&#x305F;&#x3060;&#x3057;&#x6700;&#x5F8C;&#x306E;&#x4E8B;&#x4EF6;&#x306B;&#x95A2;&#x3057;&#x3066;&#x306F;&#x5C11;&#x3005;&#x306E;&#x96D1;&#x611F;&#x306F;&#x6B8B;&#x3063;&#x305F;&#x3088;&#x3046;&#x3067;&#x3001;&#x672C;&#x4EBA;&#x3082;4&#x4EF6;&#x76EE;&#x306B;&#x95A2;&#x3057;&#x3066;&#x306F;&#x66D6;&#x6627;&#x306A;&#x8A3C;&#x8A00;&#x3092;&#x7E70;&#x308A;&#x8FD4;&#x3057;&#x3066;&#x3044;&#x308B;&#x3002;&#x671B;&#x3080;&#x7406;&#x60F3;&#x3092;&#x4F5C;&#x308A;&#x4E0A;&#x3052;&#x3089;&#x308C;&#x306A;&#x304B;&#x3063;&#x305F;&#x304B;&#x3089;&#x3060;&#x308D;&#x3046;&#x3002;<br>
+&#x300C;&#x305F;&#x3060;&#x3001;&#x305D;&#x3046;&#x3057;&#x305F;&#x304B;&#x3063;&#x305F;&#x300D;&#x3068;&#x3044;&#x3046;&#x77ED;&#x7D61;&#x7684;&#x306A;&#x8A00;&#x8449;&#x306B;&#x61A4;&#x308A;&#x3092;&#x899A;&#x3048;&#x308B;&#x304B;&#x3082;&#x3057;&#x308C;&#x306A;&#x3044;&#x304C;&#x3001;&#x614E;&#x307E;&#x3057;&#x304F;&#x751F;&#x304D;&#x308B;&#x4E16;&#x306E;&#x4EBA;&#x9593;&#x3067;&#x3082;&#x300C;&#x305D;&#x3046;&#x3057;&#x305F;&#x3044;&#x300D;&#x3068;&#x3044;&#x3046;&#x7D30;&#x3084;&#x304B;&#x306A;&#x6B32;&#x671B;&#x306F;&#x3042;&#x308B;&#x7B48;&#x3060;&#x3002;<br>
+&#x6B32;&#x671B;&#x3084;&#x597D;&#x5947;&#x5FC3;&#x3068;&#x306F;&#x6050;&#x308D;&#x3057;&#x3044;&#x3082;&#x306E;&#x3067;&#x3001;&#x6B63;&#x6C17;&#x3092;&#x5931;&#x308F;&#x305B;&#x308B;&#x3060;&#x3051;&#x306E;&#x529B;&#x3092;&#x5341;&#x5206;&#x306B;&#x80B2;&#x3066;&#x3066;&#x3057;&#x307E;&#x3046;&#x3002;<br>
+&#x72C2;&#x6C17;&#x3068;&#x6B63;&#x6C17;&#x306E;&#x5883;&#x306F;&#x66D6;&#x6627;&#x3067;&#x3042;&#x308B;&#x3002;<br>
+&#x5F97;&#x305F;&#x77E5;&#x8B58;&#x306B;&#x5BFE;&#x3057;&#x3066;&#x3069;&#x3046;&#x611F;&#x3058;&#x53D6;&#x308B;&#x304B;&#x3067;&#x305D;&#x306E;&#x5883;&#x754C;&#x306F;&#x3044;&#x304F;&#x3089;&#x3067;&#x3082;&#x8FD1;&#x3065;&#x3044;&#x3066;&#x3057;&#x307E;&#x3046;&#x3002;</p>
 </blockquote>
-<p>###　幽霊騒ぎ</p>
+<h3 class="mume-header" id="%E5%B9%BD%E9%9C%8A%E9%A8%92%E3%81%8E">&#x5E7D;&#x970A;&#x9A12;&#x304E;</h3>
+
 <blockquote>
-<p>これは信じるも信じないも任せるけど、ちょっと夜動くときに気を付けてほしい。
-特に霊園近く。
-一応伏せるけど『Z司ヶ谷霊園』付近の道を帰り際歩いてんだよね。
-そしたら、なんていうの、べちゃべちゃっていう気持ち悪い音聞こえたんだよ。</p>
-<p>でさ、気になったんだよ。よせばいいんだけど。
-でも見に行ったらさ、背が曲がった変な黒い影があって。
-人かと思ったんだけど、その顔が何か、自分に見えたり知らない人に見えたり、とにかく顔ではあったんだけど顔じゃないっていうか。
-そんなの怖くなったからもうパニックで帰った。
-したら腕掴んできてさ、結構な勢いで抵抗して殴ったんだよ。それで何とか逃げられた。
-あいつらなんだろう。人間の墓荒らしでもしてたのかな。
-幽霊とか言っていいのかわからないけどさ……どっちかっていうと動く死体みたいな……。
-まあ、信じるも信じないも任せるけど、注意だけはしたから……。</p>
-<p>それにここ一カ月ネット回線も悪いから。幽霊って電波とか電子機器を通して話しかけたりするっていうし。</p>
+<p>&#x3053;&#x308C;&#x306F;&#x4FE1;&#x3058;&#x308B;&#x3082;&#x4FE1;&#x3058;&#x306A;&#x3044;&#x3082;&#x4EFB;&#x305B;&#x308B;&#x3051;&#x3069;&#x3001;&#x3061;&#x3087;&#x3063;&#x3068;&#x591C;&#x52D5;&#x304F;&#x3068;&#x304D;&#x306B;&#x6C17;&#x3092;&#x4ED8;&#x3051;&#x3066;&#x307B;&#x3057;&#x3044;&#x3002;<br>
+&#x7279;&#x306B;&#x970A;&#x5712;&#x8FD1;&#x304F;&#x3002;<br>
+&#x4E00;&#x5FDC;&#x4F0F;&#x305B;&#x308B;&#x3051;&#x3069;&#x300E;Z&#x53F8;&#x30F6;&#x8C37;&#x970A;&#x5712;&#x300F;&#x4ED8;&#x8FD1;&#x306E;&#x9053;&#x3092;&#x5E30;&#x308A;&#x969B;&#x6B69;&#x3044;&#x3066;&#x3093;&#x3060;&#x3088;&#x306D;&#x3002;<br>
+&#x305D;&#x3057;&#x305F;&#x3089;&#x3001;&#x306A;&#x3093;&#x3066;&#x3044;&#x3046;&#x306E;&#x3001;&#x3079;&#x3061;&#x3083;&#x3079;&#x3061;&#x3083;&#x3063;&#x3066;&#x3044;&#x3046;&#x6C17;&#x6301;&#x3061;&#x60AA;&#x3044;&#x97F3;&#x805E;&#x3053;&#x3048;&#x305F;&#x3093;&#x3060;&#x3088;&#x3002;</p>
+<p>&#x3067;&#x3055;&#x3001;&#x6C17;&#x306B;&#x306A;&#x3063;&#x305F;&#x3093;&#x3060;&#x3088;&#x3002;&#x3088;&#x305B;&#x3070;&#x3044;&#x3044;&#x3093;&#x3060;&#x3051;&#x3069;&#x3002;<br>
+&#x3067;&#x3082;&#x898B;&#x306B;&#x884C;&#x3063;&#x305F;&#x3089;&#x3055;&#x3001;&#x80CC;&#x304C;&#x66F2;&#x304C;&#x3063;&#x305F;&#x5909;&#x306A;&#x9ED2;&#x3044;&#x5F71;&#x304C;&#x3042;&#x3063;&#x3066;&#x3002;<br>
+&#x4EBA;&#x304B;&#x3068;&#x601D;&#x3063;&#x305F;&#x3093;&#x3060;&#x3051;&#x3069;&#x3001;&#x305D;&#x306E;&#x9854;&#x304C;&#x4F55;&#x304B;&#x3001;&#x81EA;&#x5206;&#x306B;&#x898B;&#x3048;&#x305F;&#x308A;&#x77E5;&#x3089;&#x306A;&#x3044;&#x4EBA;&#x306B;&#x898B;&#x3048;&#x305F;&#x308A;&#x3001;&#x3068;&#x306B;&#x304B;&#x304F;&#x9854;&#x3067;&#x306F;&#x3042;&#x3063;&#x305F;&#x3093;&#x3060;&#x3051;&#x3069;&#x9854;&#x3058;&#x3083;&#x306A;&#x3044;&#x3063;&#x3066;&#x3044;&#x3046;&#x304B;&#x3002;<br>
+&#x305D;&#x3093;&#x306A;&#x306E;&#x6016;&#x304F;&#x306A;&#x3063;&#x305F;&#x304B;&#x3089;&#x3082;&#x3046;&#x30D1;&#x30CB;&#x30C3;&#x30AF;&#x3067;&#x5E30;&#x3063;&#x305F;&#x3002;<br>
+&#x3057;&#x305F;&#x3089;&#x8155;&#x63B4;&#x3093;&#x3067;&#x304D;&#x3066;&#x3055;&#x3001;&#x7D50;&#x69CB;&#x306A;&#x52E2;&#x3044;&#x3067;&#x62B5;&#x6297;&#x3057;&#x3066;&#x6BB4;&#x3063;&#x305F;&#x3093;&#x3060;&#x3088;&#x3002;&#x305D;&#x308C;&#x3067;&#x4F55;&#x3068;&#x304B;&#x9003;&#x3052;&#x3089;&#x308C;&#x305F;&#x3002;<br>
+&#x3042;&#x3044;&#x3064;&#x3089;&#x306A;&#x3093;&#x3060;&#x308D;&#x3046;&#x3002;&#x4EBA;&#x9593;&#x306E;&#x5893;&#x8352;&#x3089;&#x3057;&#x3067;&#x3082;&#x3057;&#x3066;&#x305F;&#x306E;&#x304B;&#x306A;&#x3002;<br>
+&#x5E7D;&#x970A;&#x3068;&#x304B;&#x8A00;&#x3063;&#x3066;&#x3044;&#x3044;&#x306E;&#x304B;&#x308F;&#x304B;&#x3089;&#x306A;&#x3044;&#x3051;&#x3069;&#x3055;&#x2026;&#x2026;&#x3069;&#x3063;&#x3061;&#x304B;&#x3063;&#x3066;&#x3044;&#x3046;&#x3068;&#x52D5;&#x304F;&#x6B7B;&#x4F53;&#x307F;&#x305F;&#x3044;&#x306A;&#x2026;&#x2026;&#x3002;<br>
+&#x307E;&#x3042;&#x3001;&#x4FE1;&#x3058;&#x308B;&#x3082;&#x4FE1;&#x3058;&#x306A;&#x3044;&#x3082;&#x4EFB;&#x305B;&#x308B;&#x3051;&#x3069;&#x3001;&#x6CE8;&#x610F;&#x3060;&#x3051;&#x306F;&#x3057;&#x305F;&#x304B;&#x3089;&#x2026;&#x2026;&#x3002;</p>
+<p>&#x305D;&#x308C;&#x306B;&#x3053;&#x3053;&#x4E00;&#x30AB;&#x6708;&#x30CD;&#x30C3;&#x30C8;&#x56DE;&#x7DDA;&#x3082;&#x60AA;&#x3044;&#x304B;&#x3089;&#x3002;&#x5E7D;&#x970A;&#x3063;&#x3066;&#x96FB;&#x6CE2;&#x3068;&#x304B;&#x96FB;&#x5B50;&#x6A5F;&#x5668;&#x3092;&#x901A;&#x3057;&#x3066;&#x8A71;&#x3057;&#x304B;&#x3051;&#x305F;&#x308A;&#x3059;&#x308B;&#x3063;&#x3066;&#x3044;&#x3046;&#x3057;&#x3002;</p>
 </blockquote>
 <ul>
-<li>ここ1ヶ月はネット回線が不安定（通信が悪い）のには思い当たる節がある</li>
+<li>&#x3053;&#x3053;1&#x30F6;&#x6708;&#x306F;&#x30CD;&#x30C3;&#x30C8;&#x56DE;&#x7DDA;&#x304C;&#x4E0D;&#x5B89;&#x5B9A;&#xFF08;&#x901A;&#x4FE1;&#x304C;&#x60AA;&#x3044;&#xFF09;&#x306E;&#x306B;&#x306F;&#x601D;&#x3044;&#x5F53;&#x305F;&#x308B;&#x7BC0;&#x304C;&#x3042;&#x308B;</li>
 </ul>
-<h2 id="z%E9%9C%8A%E5%9C%92">Z霊園</h2>
-<h1 id="%E9%81%8E%E5%8E%BB%E3%81%AE%E4%BA%8B%E4%BB%B6">過去の事件</h1>
-<h2 id="%E4%B8%80%E8%A6%A7">一覧</h2>
+<h2 class="mume-header" id="z%E9%9C%8A%E5%9C%92">Z&#x970A;&#x5712;</h2>
+
+<h1 class="mume-header" id="%E9%81%8E%E5%8E%BB%E3%81%AE%E4%BA%8B%E4%BB%B6">&#x904E;&#x53BB;&#x306E;&#x4E8B;&#x4EF6;</h1>
+
+<h2 class="mume-header" id="%E4%B8%80%E8%A6%A7">&#x4E00;&#x89A7;</h2>
+
 <table>
 <thead>
 <tr>
-<th>犯人</th>
-<th>犯人の状況</th>
-<th>殺し方・備考</th>
-<th>関係者</th>
+<th>&#x72AF;&#x4EBA;</th>
+<th>&#x72AF;&#x4EBA;&#x306E;&#x72B6;&#x6CC1;</th>
+<th>&#x6BBA;&#x3057;&#x65B9;&#x30FB;&#x5099;&#x8003;</th>
+<th>&#x95A2;&#x4FC2;&#x8005;</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>雨宮貴理絵</td>
-<td>死亡（数年前？）</td>
-<td>最初は腕を切りつける事から始まる。<br/>指、腕、肩と上へ上へと切断する。</td>
-<td>松伏：目撃者</td>
+<td>&#x96E8;&#x5BAE;&#x8CB4;&#x7406;&#x7D75;</td>
+<td>&#x6B7B;&#x4EA1;&#xFF08;&#x6570;&#x5E74;&#x524D;&#xFF1F;&#xFF09;</td>
+<td>&#x6700;&#x521D;&#x306F;&#x8155;&#x3092;&#x5207;&#x308A;&#x3064;&#x3051;&#x308B;&#x4E8B;&#x304B;&#x3089;&#x59CB;&#x307E;&#x308B;&#x3002;<br>&#x6307;&#x3001;&#x8155;&#x3001;&#x80A9;&#x3068;&#x4E0A;&#x3078;&#x4E0A;&#x3078;&#x3068;&#x5207;&#x65AD;&#x3059;&#x308B;&#x3002;</td>
+<td>&#x677E;&#x4F0F;&#xFF1A;&#x76EE;&#x6483;&#x8005;</td>
 </tr>
 <tr>
-<td>塩谷修一</td>
-<td>死亡（先月）</td>
-<td>最初に口を微笑むように縫われ、<br/>そこから心臓を一突きにされ対象は即死。<br/>※4件中1件の犯行に対し、曖昧な情報が続いた</td>
-<td>風見：塩谷の遺体確認者<br/>森塚幹之：精神鑑定</td>
+<td>&#x5869;&#x8C37;&#x4FEE;&#x4E00;</td>
+<td>&#x6B7B;&#x4EA1;&#xFF08;&#x5148;&#x6708;&#xFF09;</td>
+<td>&#x6700;&#x521D;&#x306B;&#x53E3;&#x3092;&#x5FAE;&#x7B11;&#x3080;&#x3088;&#x3046;&#x306B;&#x7E2B;&#x308F;&#x308C;&#x3001;<br>&#x305D;&#x3053;&#x304B;&#x3089;&#x5FC3;&#x81D3;&#x3092;&#x4E00;&#x7A81;&#x304D;&#x306B;&#x3055;&#x308C;&#x5BFE;&#x8C61;&#x306F;&#x5373;&#x6B7B;&#x3002;<br>&#x203B;4&#x4EF6;&#x4E2D;1&#x4EF6;&#x306E;&#x72AF;&#x884C;&#x306B;&#x5BFE;&#x3057;&#x3001;&#x66D6;&#x6627;&#x306A;&#x60C5;&#x5831;&#x304C;&#x7D9A;&#x3044;&#x305F;</td>
+<td>&#x98A8;&#x898B;&#xFF1A;&#x5869;&#x8C37;&#x306E;&#x907A;&#x4F53;&#x78BA;&#x8A8D;&#x8005;<br>&#x68EE;&#x585A;&#x5E79;&#x4E4B;&#xFF1A;&#x7CBE;&#x795E;&#x9451;&#x5B9A;</td>
 </tr>
 <tr>
-<td>皆藤真守</td>
+<td>&#x7686;&#x85E4;&#x771F;&#x5B88;</td>
 <td></td>
-<td>殺害し、腹に様々な果実を詰めこんだ</td>
-<td>樋川：目撃者<br/>森塚幹之：最後の事件の胎児を確認</td>
+<td>&#x6BBA;&#x5BB3;&#x3057;&#x3001;&#x8179;&#x306B;&#x69D8;&#x3005;&#x306A;&#x679C;&#x5B9F;&#x3092;&#x8A70;&#x3081;&#x3053;&#x3093;&#x3060;</td>
+<td>&#x6A0B;&#x5DDD;&#xFF1A;&#x76EE;&#x6483;&#x8005;<br>&#x68EE;&#x585A;&#x5E79;&#x4E4B;&#xFF1A;&#x6700;&#x5F8C;&#x306E;&#x4E8B;&#x4EF6;&#x306E;&#x80CE;&#x5150;&#x3092;&#x78BA;&#x8A8D;</td>
 </tr>
 <tr>
-<td>塩谷修一</td>
-<td>死亡（先月）</td>
-<td>手近にあったカッターナイフを握り無差別に<br/>※情報に若干の不信感が見られた</td>
-<td>森塚幹之：犯人を逃した</td>
+<td>&#x5869;&#x8C37;&#x4FEE;&#x4E00;</td>
+<td>&#x6B7B;&#x4EA1;&#xFF08;&#x5148;&#x6708;&#xFF09;</td>
+<td>&#x624B;&#x8FD1;&#x306B;&#x3042;&#x3063;&#x305F;&#x30AB;&#x30C3;&#x30BF;&#x30FC;&#x30CA;&#x30A4;&#x30D5;&#x3092;&#x63E1;&#x308A;&#x7121;&#x5DEE;&#x5225;&#x306B;<br>&#x203B;&#x60C5;&#x5831;&#x306B;&#x82E5;&#x5E72;&#x306E;&#x4E0D;&#x4FE1;&#x611F;&#x304C;&#x898B;&#x3089;&#x308C;&#x305F;</td>
+<td>&#x68EE;&#x585A;&#x5E79;&#x4E4B;&#xFF1A;&#x72AF;&#x4EBA;&#x3092;&#x9003;&#x3057;&#x305F;</td>
 </tr>
 </tbody>
 </table>
-<p>##　詳細</p>
-<h3 id="%E7%8C%9F%E5%A5%87%E7%8A%AF%E7%BD%AA-%E8%A1%80%E5%A1%97%E3%82%8C%E5%A4%AB%E4%BA%BA-%E9%9B%A8%E5%AE%AE%E8%B2%B4%E7%90%86%E7%B5%B5">猟奇犯罪　血塗れ夫人 【雨宮貴理絵】</h3>
+<h2 class="mume-header" id="%E8%A9%B3%E7%B4%B0">&#x8A73;&#x7D30;</h2>
+
+<h3 class="mume-header" id="%E7%8C%9F%E5%A5%87%E7%8A%AF%E7%BD%AA-%E8%A1%80%E5%A1%97%E3%82%8C%E5%A4%AB%E4%BA%BA-%E9%9B%A8%E5%AE%AE%E8%B2%B4%E7%90%86%E7%B5%B5">&#x731F;&#x5947;&#x72AF;&#x7F6A;&#x3000;&#x8840;&#x5857;&#x308C;&#x592B;&#x4EBA; &#x3010;&#x96E8;&#x5BAE;&#x8CB4;&#x7406;&#x7D75;&#x3011;</h3>
+
 <blockquote>
-<p>犯行を行う前は有名な芸術家として名を馳せていた。
-その美貌と、社交性から交友関係に困る事もなく、仕事に困る事も無かった。
-ただ美に関する執着に近いこだわりは、犯行前から噂されていたと言う。
-始めは単なる思い付きだったようだ。自分の望む赤色が出せず、試しに自身の血液で色を塗った。
-鮮血は時間が経つにつれて黒く澱んだ色になっていったが、その刹那的な変化に心を奪われてしまったらしい。
-血液が齎す赤は、塗ったその瞬間でしか得られない色だと彼女は語っている。</p>
-<p>そこから徐々に彼女の創作活動は歪んでいく。
-拙いそうした行動も、犯行を重ねるにつれてエスカレートし、学習し上達していった。
-彼女の犯行は廃墟となっている屋上が舞台となっていた。
-曰く、陽に当たる赤が最も美しく、それが人の命が潰える瞬間をより一層輝かせてくるからだそうだ。
-彼女は逮捕された後も殺人を殺人と思っている様子はなく「創作活動」だと述べていた。
-人を殺したくて殺したのではなく、その赤を出すためにやった行動が殺人だったと言う。
-被害者の殆どは体が切断されており、失血死に至るまで生き長らえていた痕跡が見受けられた。</p>
-<p>最初は腕を切りつける事から始まる。
-そこから血の出が悪くなれば指の一本から始まり、徐々に腕、肩と上へ上へと切断されていく。
-腕で切り落とせる場所が無くなれば、次は足を切りつける……と彼女は事細かく供述していた。
-被害者は皆、自身の創作活動の協力者なのだという。</p>
+<p>&#x72AF;&#x884C;&#x3092;&#x884C;&#x3046;&#x524D;&#x306F;&#x6709;&#x540D;&#x306A;&#x82B8;&#x8853;&#x5BB6;&#x3068;&#x3057;&#x3066;&#x540D;&#x3092;&#x99B3;&#x305B;&#x3066;&#x3044;&#x305F;&#x3002;<br>
+&#x305D;&#x306E;&#x7F8E;&#x8C8C;&#x3068;&#x3001;&#x793E;&#x4EA4;&#x6027;&#x304B;&#x3089;&#x4EA4;&#x53CB;&#x95A2;&#x4FC2;&#x306B;&#x56F0;&#x308B;&#x4E8B;&#x3082;&#x306A;&#x304F;&#x3001;&#x4ED5;&#x4E8B;&#x306B;&#x56F0;&#x308B;&#x4E8B;&#x3082;&#x7121;&#x304B;&#x3063;&#x305F;&#x3002;<br>
+&#x305F;&#x3060;&#x7F8E;&#x306B;&#x95A2;&#x3059;&#x308B;&#x57F7;&#x7740;&#x306B;&#x8FD1;&#x3044;&#x3053;&#x3060;&#x308F;&#x308A;&#x306F;&#x3001;&#x72AF;&#x884C;&#x524D;&#x304B;&#x3089;&#x5642;&#x3055;&#x308C;&#x3066;&#x3044;&#x305F;&#x3068;&#x8A00;&#x3046;&#x3002;<br>
+&#x59CB;&#x3081;&#x306F;&#x5358;&#x306A;&#x308B;&#x601D;&#x3044;&#x4ED8;&#x304D;&#x3060;&#x3063;&#x305F;&#x3088;&#x3046;&#x3060;&#x3002;&#x81EA;&#x5206;&#x306E;&#x671B;&#x3080;&#x8D64;&#x8272;&#x304C;&#x51FA;&#x305B;&#x305A;&#x3001;&#x8A66;&#x3057;&#x306B;&#x81EA;&#x8EAB;&#x306E;&#x8840;&#x6DB2;&#x3067;&#x8272;&#x3092;&#x5857;&#x3063;&#x305F;&#x3002;<br>
+&#x9BAE;&#x8840;&#x306F;&#x6642;&#x9593;&#x304C;&#x7D4C;&#x3064;&#x306B;&#x3064;&#x308C;&#x3066;&#x9ED2;&#x304F;&#x6FB1;&#x3093;&#x3060;&#x8272;&#x306B;&#x306A;&#x3063;&#x3066;&#x3044;&#x3063;&#x305F;&#x304C;&#x3001;&#x305D;&#x306E;&#x5239;&#x90A3;&#x7684;&#x306A;&#x5909;&#x5316;&#x306B;&#x5FC3;&#x3092;&#x596A;&#x308F;&#x308C;&#x3066;&#x3057;&#x307E;&#x3063;&#x305F;&#x3089;&#x3057;&#x3044;&#x3002;<br>
+&#x8840;&#x6DB2;&#x304C;&#x9F4E;&#x3059;&#x8D64;&#x306F;&#x3001;&#x5857;&#x3063;&#x305F;&#x305D;&#x306E;&#x77AC;&#x9593;&#x3067;&#x3057;&#x304B;&#x5F97;&#x3089;&#x308C;&#x306A;&#x3044;&#x8272;&#x3060;&#x3068;&#x5F7C;&#x5973;&#x306F;&#x8A9E;&#x3063;&#x3066;&#x3044;&#x308B;&#x3002;</p>
+<p>&#x305D;&#x3053;&#x304B;&#x3089;&#x5F90;&#x3005;&#x306B;&#x5F7C;&#x5973;&#x306E;&#x5275;&#x4F5C;&#x6D3B;&#x52D5;&#x306F;&#x6B6A;&#x3093;&#x3067;&#x3044;&#x304F;&#x3002;<br>
+&#x62D9;&#x3044;&#x305D;&#x3046;&#x3057;&#x305F;&#x884C;&#x52D5;&#x3082;&#x3001;&#x72AF;&#x884C;&#x3092;&#x91CD;&#x306D;&#x308B;&#x306B;&#x3064;&#x308C;&#x3066;&#x30A8;&#x30B9;&#x30AB;&#x30EC;&#x30FC;&#x30C8;&#x3057;&#x3001;&#x5B66;&#x7FD2;&#x3057;&#x4E0A;&#x9054;&#x3057;&#x3066;&#x3044;&#x3063;&#x305F;&#x3002;<br>
+&#x5F7C;&#x5973;&#x306E;&#x72AF;&#x884C;&#x306F;&#x5EC3;&#x589F;&#x3068;&#x306A;&#x3063;&#x3066;&#x3044;&#x308B;&#x5C4B;&#x4E0A;&#x304C;&#x821E;&#x53F0;&#x3068;&#x306A;&#x3063;&#x3066;&#x3044;&#x305F;&#x3002;<br>
+&#x66F0;&#x304F;&#x3001;&#x967D;&#x306B;&#x5F53;&#x305F;&#x308B;&#x8D64;&#x304C;&#x6700;&#x3082;&#x7F8E;&#x3057;&#x304F;&#x3001;&#x305D;&#x308C;&#x304C;&#x4EBA;&#x306E;&#x547D;&#x304C;&#x6F70;&#x3048;&#x308B;&#x77AC;&#x9593;&#x3092;&#x3088;&#x308A;&#x4E00;&#x5C64;&#x8F1D;&#x304B;&#x305B;&#x3066;&#x304F;&#x308B;&#x304B;&#x3089;&#x3060;&#x305D;&#x3046;&#x3060;&#x3002;<br>
+&#x5F7C;&#x5973;&#x306F;&#x902E;&#x6355;&#x3055;&#x308C;&#x305F;&#x5F8C;&#x3082;&#x6BBA;&#x4EBA;&#x3092;&#x6BBA;&#x4EBA;&#x3068;&#x601D;&#x3063;&#x3066;&#x3044;&#x308B;&#x69D8;&#x5B50;&#x306F;&#x306A;&#x304F;&#x300C;&#x5275;&#x4F5C;&#x6D3B;&#x52D5;&#x300D;&#x3060;&#x3068;&#x8FF0;&#x3079;&#x3066;&#x3044;&#x305F;&#x3002;<br>
+&#x4EBA;&#x3092;&#x6BBA;&#x3057;&#x305F;&#x304F;&#x3066;&#x6BBA;&#x3057;&#x305F;&#x306E;&#x3067;&#x306F;&#x306A;&#x304F;&#x3001;&#x305D;&#x306E;&#x8D64;&#x3092;&#x51FA;&#x3059;&#x305F;&#x3081;&#x306B;&#x3084;&#x3063;&#x305F;&#x884C;&#x52D5;&#x304C;&#x6BBA;&#x4EBA;&#x3060;&#x3063;&#x305F;&#x3068;&#x8A00;&#x3046;&#x3002;<br>
+&#x88AB;&#x5BB3;&#x8005;&#x306E;&#x6B86;&#x3069;&#x306F;&#x4F53;&#x304C;&#x5207;&#x65AD;&#x3055;&#x308C;&#x3066;&#x304A;&#x308A;&#x3001;&#x5931;&#x8840;&#x6B7B;&#x306B;&#x81F3;&#x308B;&#x307E;&#x3067;&#x751F;&#x304D;&#x9577;&#x3089;&#x3048;&#x3066;&#x3044;&#x305F;&#x75D5;&#x8DE1;&#x304C;&#x898B;&#x53D7;&#x3051;&#x3089;&#x308C;&#x305F;&#x3002;</p>
+<p>&#x6700;&#x521D;&#x306F;&#x8155;&#x3092;&#x5207;&#x308A;&#x3064;&#x3051;&#x308B;&#x4E8B;&#x304B;&#x3089;&#x59CB;&#x307E;&#x308B;&#x3002;<br>
+&#x305D;&#x3053;&#x304B;&#x3089;&#x8840;&#x306E;&#x51FA;&#x304C;&#x60AA;&#x304F;&#x306A;&#x308C;&#x3070;&#x6307;&#x306E;&#x4E00;&#x672C;&#x304B;&#x3089;&#x59CB;&#x307E;&#x308A;&#x3001;&#x5F90;&#x3005;&#x306B;&#x8155;&#x3001;&#x80A9;&#x3068;&#x4E0A;&#x3078;&#x4E0A;&#x3078;&#x3068;&#x5207;&#x65AD;&#x3055;&#x308C;&#x3066;&#x3044;&#x304F;&#x3002;<br>
+&#x8155;&#x3067;&#x5207;&#x308A;&#x843D;&#x3068;&#x305B;&#x308B;&#x5834;&#x6240;&#x304C;&#x7121;&#x304F;&#x306A;&#x308C;&#x3070;&#x3001;&#x6B21;&#x306F;&#x8DB3;&#x3092;&#x5207;&#x308A;&#x3064;&#x3051;&#x308B;&#x2026;&#x2026;&#x3068;&#x5F7C;&#x5973;&#x306F;&#x4E8B;&#x7D30;&#x304B;&#x304F;&#x4F9B;&#x8FF0;&#x3057;&#x3066;&#x3044;&#x305F;&#x3002;<br>
+&#x88AB;&#x5BB3;&#x8005;&#x306F;&#x7686;&#x3001;&#x81EA;&#x8EAB;&#x306E;&#x5275;&#x4F5C;&#x6D3B;&#x52D5;&#x306E;&#x5354;&#x529B;&#x8005;&#x306A;&#x306E;&#x3060;&#x3068;&#x3044;&#x3046;&#x3002;</p>
 </blockquote>
-<h3 id="%E3%83%87%E3%82%A3%E3%83%8A%E3%83%BC%E3%83%87%E3%82%B6%E3%82%A4%E3%83%8A%E3%83%BC">ディナーデザイナー</h3>
+<h3 class="mume-header" id="%E3%83%87%E3%82%A3%E3%83%8A%E3%83%BC%E3%83%87%E3%82%B6%E3%82%A4%E3%83%8A%E3%83%BC">&#x30C7;&#x30A3;&#x30CA;&#x30FC;&#x30C7;&#x30B6;&#x30A4;&#x30CA;&#x30FC;</h3>
+
 <blockquote>
-<p>こうした異名が付けられた経緯については、その犯行が異常であるからだ。
-殺害方法は総じて刺殺。最初に口を微笑むように縫われ、そこから心臓を一突きにされ対象は即死する。
-丁寧にディナーの用意をし、食卓に死体と料理を並べて飾る事からこの異名が付けられている。
-殺害時は必ず４人で１組(父・母・息子・娘)と決めているらしく、それが本当の家族であろうとなかろうと関係が無いらしい。
-大事なのは、食事を囲む際の笑み。被害者の口を縫う以外では甚振るような行為はせず、即死させている。
-最初に口を縫うのは、死後硬直をおこしてからでは面倒である点と、恐怖して死んだ顔を見るとやる気が削がれるからだと供述している。
-全4件分(死亡者16名)の被害者を出している。
-【1件目】
-・成人男性1名(片目が抉られているがその行方は知られていない。一部からは食べたのではないかと言われている)　会社員
-・未成年男女2名(即死)　学生
-・成人女性1名(即死)　会社員
-【2件目】
-・成人男性1名　会社員
-・未成年男女2名　学生
-・成人女性1名　主婦
-【3件目】
-・成人男性1名　会社員
-・未成年男女2名　学生
-・成人女性1名　会社員
-【4件目】
-・成人男性3名　1名会社員/2名身元不明
-・成人女性1名　身元不明</p>
+<p>&#x3053;&#x3046;&#x3057;&#x305F;&#x7570;&#x540D;&#x304C;&#x4ED8;&#x3051;&#x3089;&#x308C;&#x305F;&#x7D4C;&#x7DEF;&#x306B;&#x3064;&#x3044;&#x3066;&#x306F;&#x3001;&#x305D;&#x306E;&#x72AF;&#x884C;&#x304C;&#x7570;&#x5E38;&#x3067;&#x3042;&#x308B;&#x304B;&#x3089;&#x3060;&#x3002;<br>
+&#x6BBA;&#x5BB3;&#x65B9;&#x6CD5;&#x306F;&#x7DCF;&#x3058;&#x3066;&#x523A;&#x6BBA;&#x3002;&#x6700;&#x521D;&#x306B;&#x53E3;&#x3092;&#x5FAE;&#x7B11;&#x3080;&#x3088;&#x3046;&#x306B;&#x7E2B;&#x308F;&#x308C;&#x3001;&#x305D;&#x3053;&#x304B;&#x3089;&#x5FC3;&#x81D3;&#x3092;&#x4E00;&#x7A81;&#x304D;&#x306B;&#x3055;&#x308C;&#x5BFE;&#x8C61;&#x306F;&#x5373;&#x6B7B;&#x3059;&#x308B;&#x3002;<br>
+&#x4E01;&#x5BE7;&#x306B;&#x30C7;&#x30A3;&#x30CA;&#x30FC;&#x306E;&#x7528;&#x610F;&#x3092;&#x3057;&#x3001;&#x98DF;&#x5353;&#x306B;&#x6B7B;&#x4F53;&#x3068;&#x6599;&#x7406;&#x3092;&#x4E26;&#x3079;&#x3066;&#x98FE;&#x308B;&#x4E8B;&#x304B;&#x3089;&#x3053;&#x306E;&#x7570;&#x540D;&#x304C;&#x4ED8;&#x3051;&#x3089;&#x308C;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x6BBA;&#x5BB3;&#x6642;&#x306F;&#x5FC5;&#x305A;&#xFF14;&#x4EBA;&#x3067;&#xFF11;&#x7D44;(&#x7236;&#x30FB;&#x6BCD;&#x30FB;&#x606F;&#x5B50;&#x30FB;&#x5A18;)&#x3068;&#x6C7A;&#x3081;&#x3066;&#x3044;&#x308B;&#x3089;&#x3057;&#x304F;&#x3001;&#x305D;&#x308C;&#x304C;&#x672C;&#x5F53;&#x306E;&#x5BB6;&#x65CF;&#x3067;&#x3042;&#x308D;&#x3046;&#x3068;&#x306A;&#x304B;&#x308D;&#x3046;&#x3068;&#x95A2;&#x4FC2;&#x304C;&#x7121;&#x3044;&#x3089;&#x3057;&#x3044;&#x3002;<br>
+&#x5927;&#x4E8B;&#x306A;&#x306E;&#x306F;&#x3001;&#x98DF;&#x4E8B;&#x3092;&#x56F2;&#x3080;&#x969B;&#x306E;&#x7B11;&#x307F;&#x3002;&#x88AB;&#x5BB3;&#x8005;&#x306E;&#x53E3;&#x3092;&#x7E2B;&#x3046;&#x4EE5;&#x5916;&#x3067;&#x306F;&#x751A;&#x632F;&#x308B;&#x3088;&#x3046;&#x306A;&#x884C;&#x70BA;&#x306F;&#x305B;&#x305A;&#x3001;&#x5373;&#x6B7B;&#x3055;&#x305B;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x6700;&#x521D;&#x306B;&#x53E3;&#x3092;&#x7E2B;&#x3046;&#x306E;&#x306F;&#x3001;&#x6B7B;&#x5F8C;&#x786C;&#x76F4;&#x3092;&#x304A;&#x3053;&#x3057;&#x3066;&#x304B;&#x3089;&#x3067;&#x306F;&#x9762;&#x5012;&#x3067;&#x3042;&#x308B;&#x70B9;&#x3068;&#x3001;&#x6050;&#x6016;&#x3057;&#x3066;&#x6B7B;&#x3093;&#x3060;&#x9854;&#x3092;&#x898B;&#x308B;&#x3068;&#x3084;&#x308B;&#x6C17;&#x304C;&#x524A;&#x304C;&#x308C;&#x308B;&#x304B;&#x3089;&#x3060;&#x3068;&#x4F9B;&#x8FF0;&#x3057;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x5168;4&#x4EF6;&#x5206;(&#x6B7B;&#x4EA1;&#x8005;16&#x540D;)&#x306E;&#x88AB;&#x5BB3;&#x8005;&#x3092;&#x51FA;&#x3057;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x3010;1&#x4EF6;&#x76EE;&#x3011;<br>
+&#x30FB;&#x6210;&#x4EBA;&#x7537;&#x6027;1&#x540D;(&#x7247;&#x76EE;&#x304C;&#x6289;&#x3089;&#x308C;&#x3066;&#x3044;&#x308B;&#x304C;&#x305D;&#x306E;&#x884C;&#x65B9;&#x306F;&#x77E5;&#x3089;&#x308C;&#x3066;&#x3044;&#x306A;&#x3044;&#x3002;&#x4E00;&#x90E8;&#x304B;&#x3089;&#x306F;&#x98DF;&#x3079;&#x305F;&#x306E;&#x3067;&#x306F;&#x306A;&#x3044;&#x304B;&#x3068;&#x8A00;&#x308F;&#x308C;&#x3066;&#x3044;&#x308B;)&#x3000;&#x4F1A;&#x793E;&#x54E1;<br>
+&#x30FB;&#x672A;&#x6210;&#x5E74;&#x7537;&#x5973;2&#x540D;(&#x5373;&#x6B7B;)&#x3000;&#x5B66;&#x751F;<br>
+&#x30FB;&#x6210;&#x4EBA;&#x5973;&#x6027;1&#x540D;(&#x5373;&#x6B7B;)&#x3000;&#x4F1A;&#x793E;&#x54E1;<br>
+&#x3010;2&#x4EF6;&#x76EE;&#x3011;<br>
+&#x30FB;&#x6210;&#x4EBA;&#x7537;&#x6027;1&#x540D;&#x3000;&#x4F1A;&#x793E;&#x54E1;<br>
+&#x30FB;&#x672A;&#x6210;&#x5E74;&#x7537;&#x5973;2&#x540D;&#x3000;&#x5B66;&#x751F;<br>
+&#x30FB;&#x6210;&#x4EBA;&#x5973;&#x6027;1&#x540D;&#x3000;&#x4E3B;&#x5A66;<br>
+&#x3010;3&#x4EF6;&#x76EE;&#x3011;<br>
+&#x30FB;&#x6210;&#x4EBA;&#x7537;&#x6027;1&#x540D;&#x3000;&#x4F1A;&#x793E;&#x54E1;<br>
+&#x30FB;&#x672A;&#x6210;&#x5E74;&#x7537;&#x5973;2&#x540D;&#x3000;&#x5B66;&#x751F;<br>
+&#x30FB;&#x6210;&#x4EBA;&#x5973;&#x6027;1&#x540D;&#x3000;&#x4F1A;&#x793E;&#x54E1;<br>
+&#x3010;4&#x4EF6;&#x76EE;&#x3011;<br>
+&#x30FB;&#x6210;&#x4EBA;&#x7537;&#x6027;3&#x540D;&#x3000;1&#x540D;&#x4F1A;&#x793E;&#x54E1;/2&#x540D;&#x8EAB;&#x5143;&#x4E0D;&#x660E;<br>
+&#x30FB;&#x6210;&#x4EBA;&#x5973;&#x6027;1&#x540D;&#x3000;&#x8EAB;&#x5143;&#x4E0D;&#x660E;</p>
 <hr>
-<p>逮捕された後、精神鑑定をする運びとなり森塚幹之(もりつかみきゆき)がそれを担う事になったが、その際に事件が勃発する。
-『N大学病院の惨劇』と呼ばれる無差別殺人である。
-森塚幹之の精神鑑定の最中に塩谷修一容疑者は逃走を計り、警備を任されていた警察官と森塚幹之が負傷してしまう。
-そのまま塩谷修一は院内に居た患者や関係者を殺傷。2名が死亡、3名が重軽傷を負った。
-取り押さえられた塩谷修一は何故か靴を履いていなかったと関係者が話している。</p>
-<p>塩谷修一容疑者は死刑が執行されており、執行されたのは20XX年〇月15日(先月の15日)となっている。故36歳。
-15年前の事件でありながら、現在まで死刑執行が長引いていたのは『N大学病院の惨劇』に関する情報に若干の不信感が見られた為であるのと、
-4件中1件の犯行に対し、曖昧な情報が続いた為である。
-死刑執行後、身寄りがなく『献体』としても拒否された塩谷修一容疑者の遺体は東京拘置所にて速やかに火葬されている。</p>
-<p>遺体確認者：風見ルカ</p>
+<p>&#x902E;&#x6355;&#x3055;&#x308C;&#x305F;&#x5F8C;&#x3001;&#x7CBE;&#x795E;&#x9451;&#x5B9A;&#x3092;&#x3059;&#x308B;&#x904B;&#x3073;&#x3068;&#x306A;&#x308A;&#x68EE;&#x585A;&#x5E79;&#x4E4B;(&#x3082;&#x308A;&#x3064;&#x304B;&#x307F;&#x304D;&#x3086;&#x304D;)&#x304C;&#x305D;&#x308C;&#x3092;&#x62C5;&#x3046;&#x4E8B;&#x306B;&#x306A;&#x3063;&#x305F;&#x304C;&#x3001;&#x305D;&#x306E;&#x969B;&#x306B;&#x4E8B;&#x4EF6;&#x304C;&#x52C3;&#x767A;&#x3059;&#x308B;&#x3002;<br>
+&#x300E;N&#x5927;&#x5B66;&#x75C5;&#x9662;&#x306E;&#x60E8;&#x5287;&#x300F;&#x3068;&#x547C;&#x3070;&#x308C;&#x308B;&#x7121;&#x5DEE;&#x5225;&#x6BBA;&#x4EBA;&#x3067;&#x3042;&#x308B;&#x3002;<br>
+&#x68EE;&#x585A;&#x5E79;&#x4E4B;&#x306E;&#x7CBE;&#x795E;&#x9451;&#x5B9A;&#x306E;&#x6700;&#x4E2D;&#x306B;&#x5869;&#x8C37;&#x4FEE;&#x4E00;&#x5BB9;&#x7591;&#x8005;&#x306F;&#x9003;&#x8D70;&#x3092;&#x8A08;&#x308A;&#x3001;&#x8B66;&#x5099;&#x3092;&#x4EFB;&#x3055;&#x308C;&#x3066;&#x3044;&#x305F;&#x8B66;&#x5BDF;&#x5B98;&#x3068;&#x68EE;&#x585A;&#x5E79;&#x4E4B;&#x304C;&#x8CA0;&#x50B7;&#x3057;&#x3066;&#x3057;&#x307E;&#x3046;&#x3002;<br>
+&#x305D;&#x306E;&#x307E;&#x307E;&#x5869;&#x8C37;&#x4FEE;&#x4E00;&#x306F;&#x9662;&#x5185;&#x306B;&#x5C45;&#x305F;&#x60A3;&#x8005;&#x3084;&#x95A2;&#x4FC2;&#x8005;&#x3092;&#x6BBA;&#x50B7;&#x3002;2&#x540D;&#x304C;&#x6B7B;&#x4EA1;&#x3001;3&#x540D;&#x304C;&#x91CD;&#x8EFD;&#x50B7;&#x3092;&#x8CA0;&#x3063;&#x305F;&#x3002;<br>
+&#x53D6;&#x308A;&#x62BC;&#x3055;&#x3048;&#x3089;&#x308C;&#x305F;&#x5869;&#x8C37;&#x4FEE;&#x4E00;&#x306F;&#x4F55;&#x6545;&#x304B;&#x9774;&#x3092;&#x5C65;&#x3044;&#x3066;&#x3044;&#x306A;&#x304B;&#x3063;&#x305F;&#x3068;&#x95A2;&#x4FC2;&#x8005;&#x304C;&#x8A71;&#x3057;&#x3066;&#x3044;&#x308B;&#x3002;</p>
+<p>&#x5869;&#x8C37;&#x4FEE;&#x4E00;&#x5BB9;&#x7591;&#x8005;&#x306F;&#x6B7B;&#x5211;&#x304C;&#x57F7;&#x884C;&#x3055;&#x308C;&#x3066;&#x304A;&#x308A;&#x3001;&#x57F7;&#x884C;&#x3055;&#x308C;&#x305F;&#x306E;&#x306F;20XX&#x5E74;&#x3007;&#x6708;15&#x65E5;(&#x5148;&#x6708;&#x306E;15&#x65E5;)&#x3068;&#x306A;&#x3063;&#x3066;&#x3044;&#x308B;&#x3002;&#x6545;36&#x6B73;&#x3002;<br>
+15&#x5E74;&#x524D;&#x306E;&#x4E8B;&#x4EF6;&#x3067;&#x3042;&#x308A;&#x306A;&#x304C;&#x3089;&#x3001;&#x73FE;&#x5728;&#x307E;&#x3067;&#x6B7B;&#x5211;&#x57F7;&#x884C;&#x304C;&#x9577;&#x5F15;&#x3044;&#x3066;&#x3044;&#x305F;&#x306E;&#x306F;&#x300E;N&#x5927;&#x5B66;&#x75C5;&#x9662;&#x306E;&#x60E8;&#x5287;&#x300F;&#x306B;&#x95A2;&#x3059;&#x308B;&#x60C5;&#x5831;&#x306B;&#x82E5;&#x5E72;&#x306E;&#x4E0D;&#x4FE1;&#x611F;&#x304C;&#x898B;&#x3089;&#x308C;&#x305F;&#x70BA;&#x3067;&#x3042;&#x308B;&#x306E;&#x3068;&#x3001;<br>
+4&#x4EF6;&#x4E2D;1&#x4EF6;&#x306E;&#x72AF;&#x884C;&#x306B;&#x5BFE;&#x3057;&#x3001;&#x66D6;&#x6627;&#x306A;&#x60C5;&#x5831;&#x304C;&#x7D9A;&#x3044;&#x305F;&#x70BA;&#x3067;&#x3042;&#x308B;&#x3002;<br>
+&#x6B7B;&#x5211;&#x57F7;&#x884C;&#x5F8C;&#x3001;&#x8EAB;&#x5BC4;&#x308A;&#x304C;&#x306A;&#x304F;&#x300E;&#x732E;&#x4F53;&#x300F;&#x3068;&#x3057;&#x3066;&#x3082;&#x62D2;&#x5426;&#x3055;&#x308C;&#x305F;&#x5869;&#x8C37;&#x4FEE;&#x4E00;&#x5BB9;&#x7591;&#x8005;&#x306E;&#x907A;&#x4F53;&#x306F;&#x6771;&#x4EAC;&#x62D8;&#x7F6E;&#x6240;&#x306B;&#x3066;&#x901F;&#x3084;&#x304B;&#x306B;&#x706B;&#x846C;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3002;</p>
+<p>&#x907A;&#x4F53;&#x78BA;&#x8A8D;&#x8005;&#xFF1A;&#x98A8;&#x898B;&#x30EB;&#x30AB;</p>
 </blockquote>
-<p>###　ハーヴェスト</p>
+<h3 class="mume-header" id="%E3%83%8F%E3%83%BC%E3%83%B4%E3%82%A7%E3%82%B9%E3%83%88">&#x30CF;&#x30FC;&#x30F4;&#x30A7;&#x30B9;&#x30C8;</h3>
+
 <blockquote>
-<p>事件は30年ほど前のものとなる。皆藤真守の家庭は農業を営んでいた。
-　最初は良い収益を得ていたようだったが、それも時代の流れにより徐々に悪化の一途を辿るようになっていた。
-　それに比例するように皆藤の父親は母親に対して暴力を振るうようになり、ある日不可抗力ではあるものの殺害してしまう。
-　現場を見た皆藤に対し、父親は共に埋める事を強要し共犯者となった。皆藤真守はその事を逮捕後鮮明に物語っている。
-　母親の為に熟れた林檎を栽培し、持って帰る途中での出来事であったようで、父親に埋めるよう指示を受けた後しばらくは一人で母親を見下ろしていたという。
-　そうしてから、ふとせっかく取ったのだからと林檎を口に入れようとしたのだそうだ。
-　けれどやや硬直が始まっていた死体にはそれが難しく、口には入らなかった。ならせめて腹に入れてやろうと、ナイフで腹を裂いたという。
-　そこに林檎を納め、優しく土をかけたのが彼が凶行に及ぶきっかけとなる。
-　やがて時が経ち、埋めた場所から林檎の芽が出ているのに気づいた皆藤は「生命の再生」を感じたのだという。
-　以降彼は、父親、そして親しい人間ばかりを殺害し、腹に様々な果実を詰めこんだのだという。そうしてよく育つようにと温室に遺体を安置させた。
-　現場を見た高校生より通報があり、この事実が露見。逮捕された当時彼は全く悪びれた様子もなく「大丈夫また生まれるから」と笑ったと言う。
-　逮捕の直前彼が手をかけていたのは妊娠9ヵ月だった自身の妻であった。
-　腹を裂かれ、無理矢理外に出された胎児は、その遺体を確認した若い医師(現在失踪中の森塚幹之氏)によって死亡が確認されている。
-　
-　この事件は東京都と埼玉県の境で起きた事件ではあるが、前代未聞な事件であったこともあり、東京都が担当する事になった。
-　東京拘置所にて身柄が管理され、死刑執行も次いで行われている。
-　当時通報をした高校生、樋川裕孝氏は現在警察官として市民の安全を守っている。
-　「あの経験があったからこそ、刑事を目指すと誓った」と取材の際答えてくれた。</p>
+<p>&#x4E8B;&#x4EF6;&#x306F;30&#x5E74;&#x307B;&#x3069;&#x524D;&#x306E;&#x3082;&#x306E;&#x3068;&#x306A;&#x308B;&#x3002;&#x7686;&#x85E4;&#x771F;&#x5B88;&#x306E;&#x5BB6;&#x5EAD;&#x306F;&#x8FB2;&#x696D;&#x3092;&#x55B6;&#x3093;&#x3067;&#x3044;&#x305F;&#x3002;<br>
+&#x3000;&#x6700;&#x521D;&#x306F;&#x826F;&#x3044;&#x53CE;&#x76CA;&#x3092;&#x5F97;&#x3066;&#x3044;&#x305F;&#x3088;&#x3046;&#x3060;&#x3063;&#x305F;&#x304C;&#x3001;&#x305D;&#x308C;&#x3082;&#x6642;&#x4EE3;&#x306E;&#x6D41;&#x308C;&#x306B;&#x3088;&#x308A;&#x5F90;&#x3005;&#x306B;&#x60AA;&#x5316;&#x306E;&#x4E00;&#x9014;&#x3092;&#x8FBF;&#x308B;&#x3088;&#x3046;&#x306B;&#x306A;&#x3063;&#x3066;&#x3044;&#x305F;&#x3002;<br>
+&#x3000;&#x305D;&#x308C;&#x306B;&#x6BD4;&#x4F8B;&#x3059;&#x308B;&#x3088;&#x3046;&#x306B;&#x7686;&#x85E4;&#x306E;&#x7236;&#x89AA;&#x306F;&#x6BCD;&#x89AA;&#x306B;&#x5BFE;&#x3057;&#x3066;&#x66B4;&#x529B;&#x3092;&#x632F;&#x308B;&#x3046;&#x3088;&#x3046;&#x306B;&#x306A;&#x308A;&#x3001;&#x3042;&#x308B;&#x65E5;&#x4E0D;&#x53EF;&#x6297;&#x529B;&#x3067;&#x306F;&#x3042;&#x308B;&#x3082;&#x306E;&#x306E;&#x6BBA;&#x5BB3;&#x3057;&#x3066;&#x3057;&#x307E;&#x3046;&#x3002;<br>
+&#x3000;&#x73FE;&#x5834;&#x3092;&#x898B;&#x305F;&#x7686;&#x85E4;&#x306B;&#x5BFE;&#x3057;&#x3001;&#x7236;&#x89AA;&#x306F;&#x5171;&#x306B;&#x57CB;&#x3081;&#x308B;&#x4E8B;&#x3092;&#x5F37;&#x8981;&#x3057;&#x5171;&#x72AF;&#x8005;&#x3068;&#x306A;&#x3063;&#x305F;&#x3002;&#x7686;&#x85E4;&#x771F;&#x5B88;&#x306F;&#x305D;&#x306E;&#x4E8B;&#x3092;&#x902E;&#x6355;&#x5F8C;&#x9BAE;&#x660E;&#x306B;&#x7269;&#x8A9E;&#x3063;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x3000;&#x6BCD;&#x89AA;&#x306E;&#x70BA;&#x306B;&#x719F;&#x308C;&#x305F;&#x6797;&#x6A8E;&#x3092;&#x683D;&#x57F9;&#x3057;&#x3001;&#x6301;&#x3063;&#x3066;&#x5E30;&#x308B;&#x9014;&#x4E2D;&#x3067;&#x306E;&#x51FA;&#x6765;&#x4E8B;&#x3067;&#x3042;&#x3063;&#x305F;&#x3088;&#x3046;&#x3067;&#x3001;&#x7236;&#x89AA;&#x306B;&#x57CB;&#x3081;&#x308B;&#x3088;&#x3046;&#x6307;&#x793A;&#x3092;&#x53D7;&#x3051;&#x305F;&#x5F8C;&#x3057;&#x3070;&#x3089;&#x304F;&#x306F;&#x4E00;&#x4EBA;&#x3067;&#x6BCD;&#x89AA;&#x3092;&#x898B;&#x4E0B;&#x308D;&#x3057;&#x3066;&#x3044;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x3000;&#x305D;&#x3046;&#x3057;&#x3066;&#x304B;&#x3089;&#x3001;&#x3075;&#x3068;&#x305B;&#x3063;&#x304B;&#x304F;&#x53D6;&#x3063;&#x305F;&#x306E;&#x3060;&#x304B;&#x3089;&#x3068;&#x6797;&#x6A8E;&#x3092;&#x53E3;&#x306B;&#x5165;&#x308C;&#x3088;&#x3046;&#x3068;&#x3057;&#x305F;&#x306E;&#x3060;&#x305D;&#x3046;&#x3060;&#x3002;<br>
+&#x3000;&#x3051;&#x308C;&#x3069;&#x3084;&#x3084;&#x786C;&#x76F4;&#x304C;&#x59CB;&#x307E;&#x3063;&#x3066;&#x3044;&#x305F;&#x6B7B;&#x4F53;&#x306B;&#x306F;&#x305D;&#x308C;&#x304C;&#x96E3;&#x3057;&#x304F;&#x3001;&#x53E3;&#x306B;&#x306F;&#x5165;&#x3089;&#x306A;&#x304B;&#x3063;&#x305F;&#x3002;&#x306A;&#x3089;&#x305B;&#x3081;&#x3066;&#x8179;&#x306B;&#x5165;&#x308C;&#x3066;&#x3084;&#x308D;&#x3046;&#x3068;&#x3001;&#x30CA;&#x30A4;&#x30D5;&#x3067;&#x8179;&#x3092;&#x88C2;&#x3044;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x3000;&#x305D;&#x3053;&#x306B;&#x6797;&#x6A8E;&#x3092;&#x7D0D;&#x3081;&#x3001;&#x512A;&#x3057;&#x304F;&#x571F;&#x3092;&#x304B;&#x3051;&#x305F;&#x306E;&#x304C;&#x5F7C;&#x304C;&#x51F6;&#x884C;&#x306B;&#x53CA;&#x3076;&#x304D;&#x3063;&#x304B;&#x3051;&#x3068;&#x306A;&#x308B;&#x3002;<br>
+&#x3000;&#x3084;&#x304C;&#x3066;&#x6642;&#x304C;&#x7D4C;&#x3061;&#x3001;&#x57CB;&#x3081;&#x305F;&#x5834;&#x6240;&#x304B;&#x3089;&#x6797;&#x6A8E;&#x306E;&#x82BD;&#x304C;&#x51FA;&#x3066;&#x3044;&#x308B;&#x306E;&#x306B;&#x6C17;&#x3065;&#x3044;&#x305F;&#x7686;&#x85E4;&#x306F;&#x300C;&#x751F;&#x547D;&#x306E;&#x518D;&#x751F;&#x300D;&#x3092;&#x611F;&#x3058;&#x305F;&#x306E;&#x3060;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x3000;&#x4EE5;&#x964D;&#x5F7C;&#x306F;&#x3001;&#x7236;&#x89AA;&#x3001;&#x305D;&#x3057;&#x3066;&#x89AA;&#x3057;&#x3044;&#x4EBA;&#x9593;&#x3070;&#x304B;&#x308A;&#x3092;&#x6BBA;&#x5BB3;&#x3057;&#x3001;&#x8179;&#x306B;&#x69D8;&#x3005;&#x306A;&#x679C;&#x5B9F;&#x3092;&#x8A70;&#x3081;&#x3053;&#x3093;&#x3060;&#x306E;&#x3060;&#x3068;&#x3044;&#x3046;&#x3002;&#x305D;&#x3046;&#x3057;&#x3066;&#x3088;&#x304F;&#x80B2;&#x3064;&#x3088;&#x3046;&#x306B;&#x3068;&#x6E29;&#x5BA4;&#x306B;&#x907A;&#x4F53;&#x3092;&#x5B89;&#x7F6E;&#x3055;&#x305B;&#x305F;&#x3002;<br>
+&#x3000;&#x73FE;&#x5834;&#x3092;&#x898B;&#x305F;&#x9AD8;&#x6821;&#x751F;&#x3088;&#x308A;&#x901A;&#x5831;&#x304C;&#x3042;&#x308A;&#x3001;&#x3053;&#x306E;&#x4E8B;&#x5B9F;&#x304C;&#x9732;&#x898B;&#x3002;&#x902E;&#x6355;&#x3055;&#x308C;&#x305F;&#x5F53;&#x6642;&#x5F7C;&#x306F;&#x5168;&#x304F;&#x60AA;&#x3073;&#x308C;&#x305F;&#x69D8;&#x5B50;&#x3082;&#x306A;&#x304F;&#x300C;&#x5927;&#x4E08;&#x592B;&#x307E;&#x305F;&#x751F;&#x307E;&#x308C;&#x308B;&#x304B;&#x3089;&#x300D;&#x3068;&#x7B11;&#x3063;&#x305F;&#x3068;&#x8A00;&#x3046;&#x3002;<br>
+&#x3000;&#x902E;&#x6355;&#x306E;&#x76F4;&#x524D;&#x5F7C;&#x304C;&#x624B;&#x3092;&#x304B;&#x3051;&#x3066;&#x3044;&#x305F;&#x306E;&#x306F;&#x598A;&#x5A20;9&#x30F5;&#x6708;&#x3060;&#x3063;&#x305F;&#x81EA;&#x8EAB;&#x306E;&#x59BB;&#x3067;&#x3042;&#x3063;&#x305F;&#x3002;<br>
+&#x3000;&#x8179;&#x3092;&#x88C2;&#x304B;&#x308C;&#x3001;&#x7121;&#x7406;&#x77E2;&#x7406;&#x5916;&#x306B;&#x51FA;&#x3055;&#x308C;&#x305F;&#x80CE;&#x5150;&#x306F;&#x3001;&#x305D;&#x306E;&#x907A;&#x4F53;&#x3092;&#x78BA;&#x8A8D;&#x3057;&#x305F;&#x82E5;&#x3044;&#x533B;&#x5E2B;(&#x73FE;&#x5728;&#x5931;&#x8E2A;&#x4E2D;&#x306E;&#x68EE;&#x585A;&#x5E79;&#x4E4B;&#x6C0F;)&#x306B;&#x3088;&#x3063;&#x3066;&#x6B7B;&#x4EA1;&#x304C;&#x78BA;&#x8A8D;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x3000;<br>
+&#x3000;&#x3053;&#x306E;&#x4E8B;&#x4EF6;&#x306F;&#x6771;&#x4EAC;&#x90FD;&#x3068;&#x57FC;&#x7389;&#x770C;&#x306E;&#x5883;&#x3067;&#x8D77;&#x304D;&#x305F;&#x4E8B;&#x4EF6;&#x3067;&#x306F;&#x3042;&#x308B;&#x304C;&#x3001;&#x524D;&#x4EE3;&#x672A;&#x805E;&#x306A;&#x4E8B;&#x4EF6;&#x3067;&#x3042;&#x3063;&#x305F;&#x3053;&#x3068;&#x3082;&#x3042;&#x308A;&#x3001;&#x6771;&#x4EAC;&#x90FD;&#x304C;&#x62C5;&#x5F53;&#x3059;&#x308B;&#x4E8B;&#x306B;&#x306A;&#x3063;&#x305F;&#x3002;<br>
+&#x3000;&#x6771;&#x4EAC;&#x62D8;&#x7F6E;&#x6240;&#x306B;&#x3066;&#x8EAB;&#x67C4;&#x304C;&#x7BA1;&#x7406;&#x3055;&#x308C;&#x3001;&#x6B7B;&#x5211;&#x57F7;&#x884C;&#x3082;&#x6B21;&#x3044;&#x3067;&#x884C;&#x308F;&#x308C;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x3000;&#x5F53;&#x6642;&#x901A;&#x5831;&#x3092;&#x3057;&#x305F;&#x9AD8;&#x6821;&#x751F;&#x3001;&#x6A0B;&#x5DDD;&#x88D5;&#x5B5D;&#x6C0F;&#x306F;&#x73FE;&#x5728;&#x8B66;&#x5BDF;&#x5B98;&#x3068;&#x3057;&#x3066;&#x5E02;&#x6C11;&#x306E;&#x5B89;&#x5168;&#x3092;&#x5B88;&#x3063;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x3000;&#x300C;&#x3042;&#x306E;&#x7D4C;&#x9A13;&#x304C;&#x3042;&#x3063;&#x305F;&#x304B;&#x3089;&#x3053;&#x305D;&#x3001;&#x5211;&#x4E8B;&#x3092;&#x76EE;&#x6307;&#x3059;&#x3068;&#x8A93;&#x3063;&#x305F;&#x300D;&#x3068;&#x53D6;&#x6750;&#x306E;&#x969B;&#x7B54;&#x3048;&#x3066;&#x304F;&#x308C;&#x305F;&#x3002;</p>
 </blockquote>
-<h3 id="n%E5%A4%A7%E5%AD%A6%E7%97%85%E9%99%A2%E3%81%AE%E6%83%A8%E5%8A%87">N大学病院の惨劇</h3>
+<h3 class="mume-header" id="n%E5%A4%A7%E5%AD%A6%E7%97%85%E9%99%A2%E3%81%AE%E6%83%A8%E5%8A%87">N&#x5927;&#x5B66;&#x75C5;&#x9662;&#x306E;&#x60E8;&#x5287;</h3>
+
 <blockquote>
-<p>当時精神鑑定を行った森塚幹之氏は元々N大学病院にて精神神経科を担当する医師である。
-30年前の皆藤真守(『ハーヴェスト』)と関わったのをきっかけに精神科医を目指したというのは界隈ではよく知れ渡った話だ。</p>
-<p>氏は同時に大学では教鞭を握り、未来ある学生らに講義を行っていた人物でもあった。
-カウンセリングに対する評判も悪くなく、その多忙さを微塵も感じさせないようなフットワークの軽さを見せていたという。
-その多忙さによって手を緩めてしまったのか、森塚氏は一瞬隙を作ってしまったという。
-本人も酷い罪悪感に苛まれていたが、警察への事情聴取では「誰かの手引きがなければ不可能だ」とそれだけははっきり述べていたという。
-塩谷修一死刑囚は、扉から出、手近にあったカッターナイフを握り無差別に人を襲い始めた。
-主に家族連れが多かったようで、この事件により柊さん、高橋さんが死亡。
-沖田さん、水村さん、小松さんの三名が重軽傷を負う事になった。
-その後駆け付けた警察によって取り押さえられたが、被害はあまりにも大きく、当時の管理体制は激しいバッシングを受けた。
-殊更誹謗中傷のターゲットとなったのは森塚幹之氏である。何故か警察組織ではなく医師の方に全てのバッシングが向けられるようになったのだ。
-幾分かの陰謀論も湧き立ったが、元々の罪悪感も相俟ってか森塚氏はそこから暫くして姿をくらましてしまっている。
-森塚氏には32年前に死別した妻が居たきりで、親族もおらず天涯孤独の身であり捜索は難航している。
-現在(20XX年現在)でも行方不明として扱われているようだ。</p>
-<p>森塚氏は「この世には解明できないものもある」「いずれそれと向き合う時がくる」等と友人に零していたようだ。
-噂によれば、氏は何か超自然現象的なものにも関心を寄せていたと聞く。
-また別の友人が言うには「子供は居た」との事だが、戸籍上そのような人間は居ない。
-32年前に亡くなっている妻は確かに子供を身ごもっていたが、早産の為生まれる事なく子供は死亡している。
-精神科医としての落ち度故の惨劇か、それともその他の陰謀か、はたまた氏独自が抱く何かしらの思惑によるものだったのか。
-未だ謎多き事件とされている。</p>
+<p>&#x5F53;&#x6642;&#x7CBE;&#x795E;&#x9451;&#x5B9A;&#x3092;&#x884C;&#x3063;&#x305F;&#x68EE;&#x585A;&#x5E79;&#x4E4B;&#x6C0F;&#x306F;&#x5143;&#x3005;N&#x5927;&#x5B66;&#x75C5;&#x9662;&#x306B;&#x3066;&#x7CBE;&#x795E;&#x795E;&#x7D4C;&#x79D1;&#x3092;&#x62C5;&#x5F53;&#x3059;&#x308B;&#x533B;&#x5E2B;&#x3067;&#x3042;&#x308B;&#x3002;<br>
+30&#x5E74;&#x524D;&#x306E;&#x7686;&#x85E4;&#x771F;&#x5B88;(&#x300E;&#x30CF;&#x30FC;&#x30F4;&#x30A7;&#x30B9;&#x30C8;&#x300F;)&#x3068;&#x95A2;&#x308F;&#x3063;&#x305F;&#x306E;&#x3092;&#x304D;&#x3063;&#x304B;&#x3051;&#x306B;&#x7CBE;&#x795E;&#x79D1;&#x533B;&#x3092;&#x76EE;&#x6307;&#x3057;&#x305F;&#x3068;&#x3044;&#x3046;&#x306E;&#x306F;&#x754C;&#x9688;&#x3067;&#x306F;&#x3088;&#x304F;&#x77E5;&#x308C;&#x6E21;&#x3063;&#x305F;&#x8A71;&#x3060;&#x3002;</p>
+<p>&#x6C0F;&#x306F;&#x540C;&#x6642;&#x306B;&#x5927;&#x5B66;&#x3067;&#x306F;&#x6559;&#x97AD;&#x3092;&#x63E1;&#x308A;&#x3001;&#x672A;&#x6765;&#x3042;&#x308B;&#x5B66;&#x751F;&#x3089;&#x306B;&#x8B1B;&#x7FA9;&#x3092;&#x884C;&#x3063;&#x3066;&#x3044;&#x305F;&#x4EBA;&#x7269;&#x3067;&#x3082;&#x3042;&#x3063;&#x305F;&#x3002;<br>
+&#x30AB;&#x30A6;&#x30F3;&#x30BB;&#x30EA;&#x30F3;&#x30B0;&#x306B;&#x5BFE;&#x3059;&#x308B;&#x8A55;&#x5224;&#x3082;&#x60AA;&#x304F;&#x306A;&#x304F;&#x3001;&#x305D;&#x306E;&#x591A;&#x5FD9;&#x3055;&#x3092;&#x5FAE;&#x5875;&#x3082;&#x611F;&#x3058;&#x3055;&#x305B;&#x306A;&#x3044;&#x3088;&#x3046;&#x306A;&#x30D5;&#x30C3;&#x30C8;&#x30EF;&#x30FC;&#x30AF;&#x306E;&#x8EFD;&#x3055;&#x3092;&#x898B;&#x305B;&#x3066;&#x3044;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x305D;&#x306E;&#x591A;&#x5FD9;&#x3055;&#x306B;&#x3088;&#x3063;&#x3066;&#x624B;&#x3092;&#x7DE9;&#x3081;&#x3066;&#x3057;&#x307E;&#x3063;&#x305F;&#x306E;&#x304B;&#x3001;&#x68EE;&#x585A;&#x6C0F;&#x306F;&#x4E00;&#x77AC;&#x9699;&#x3092;&#x4F5C;&#x3063;&#x3066;&#x3057;&#x307E;&#x3063;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x672C;&#x4EBA;&#x3082;&#x9177;&#x3044;&#x7F6A;&#x60AA;&#x611F;&#x306B;&#x82DB;&#x307E;&#x308C;&#x3066;&#x3044;&#x305F;&#x304C;&#x3001;&#x8B66;&#x5BDF;&#x3078;&#x306E;&#x4E8B;&#x60C5;&#x8074;&#x53D6;&#x3067;&#x306F;&#x300C;&#x8AB0;&#x304B;&#x306E;&#x624B;&#x5F15;&#x304D;&#x304C;&#x306A;&#x3051;&#x308C;&#x3070;&#x4E0D;&#x53EF;&#x80FD;&#x3060;&#x300D;&#x3068;&#x305D;&#x308C;&#x3060;&#x3051;&#x306F;&#x306F;&#x3063;&#x304D;&#x308A;&#x8FF0;&#x3079;&#x3066;&#x3044;&#x305F;&#x3068;&#x3044;&#x3046;&#x3002;<br>
+&#x5869;&#x8C37;&#x4FEE;&#x4E00;&#x6B7B;&#x5211;&#x56DA;&#x306F;&#x3001;&#x6249;&#x304B;&#x3089;&#x51FA;&#x3001;&#x624B;&#x8FD1;&#x306B;&#x3042;&#x3063;&#x305F;&#x30AB;&#x30C3;&#x30BF;&#x30FC;&#x30CA;&#x30A4;&#x30D5;&#x3092;&#x63E1;&#x308A;&#x7121;&#x5DEE;&#x5225;&#x306B;&#x4EBA;&#x3092;&#x8972;&#x3044;&#x59CB;&#x3081;&#x305F;&#x3002;<br>
+&#x4E3B;&#x306B;&#x5BB6;&#x65CF;&#x9023;&#x308C;&#x304C;&#x591A;&#x304B;&#x3063;&#x305F;&#x3088;&#x3046;&#x3067;&#x3001;&#x3053;&#x306E;&#x4E8B;&#x4EF6;&#x306B;&#x3088;&#x308A;&#x67CA;&#x3055;&#x3093;&#x3001;&#x9AD8;&#x6A4B;&#x3055;&#x3093;&#x304C;&#x6B7B;&#x4EA1;&#x3002;<br>
+&#x6C96;&#x7530;&#x3055;&#x3093;&#x3001;&#x6C34;&#x6751;&#x3055;&#x3093;&#x3001;&#x5C0F;&#x677E;&#x3055;&#x3093;&#x306E;&#x4E09;&#x540D;&#x304C;&#x91CD;&#x8EFD;&#x50B7;&#x3092;&#x8CA0;&#x3046;&#x4E8B;&#x306B;&#x306A;&#x3063;&#x305F;&#x3002;<br>
+&#x305D;&#x306E;&#x5F8C;&#x99C6;&#x3051;&#x4ED8;&#x3051;&#x305F;&#x8B66;&#x5BDF;&#x306B;&#x3088;&#x3063;&#x3066;&#x53D6;&#x308A;&#x62BC;&#x3055;&#x3048;&#x3089;&#x308C;&#x305F;&#x304C;&#x3001;&#x88AB;&#x5BB3;&#x306F;&#x3042;&#x307E;&#x308A;&#x306B;&#x3082;&#x5927;&#x304D;&#x304F;&#x3001;&#x5F53;&#x6642;&#x306E;&#x7BA1;&#x7406;&#x4F53;&#x5236;&#x306F;&#x6FC0;&#x3057;&#x3044;&#x30D0;&#x30C3;&#x30B7;&#x30F3;&#x30B0;&#x3092;&#x53D7;&#x3051;&#x305F;&#x3002;<br>
+&#x6B8A;&#x66F4;&#x8AB9;&#x8B17;&#x4E2D;&#x50B7;&#x306E;&#x30BF;&#x30FC;&#x30B2;&#x30C3;&#x30C8;&#x3068;&#x306A;&#x3063;&#x305F;&#x306E;&#x306F;&#x68EE;&#x585A;&#x5E79;&#x4E4B;&#x6C0F;&#x3067;&#x3042;&#x308B;&#x3002;&#x4F55;&#x6545;&#x304B;&#x8B66;&#x5BDF;&#x7D44;&#x7E54;&#x3067;&#x306F;&#x306A;&#x304F;&#x533B;&#x5E2B;&#x306E;&#x65B9;&#x306B;&#x5168;&#x3066;&#x306E;&#x30D0;&#x30C3;&#x30B7;&#x30F3;&#x30B0;&#x304C;&#x5411;&#x3051;&#x3089;&#x308C;&#x308B;&#x3088;&#x3046;&#x306B;&#x306A;&#x3063;&#x305F;&#x306E;&#x3060;&#x3002;<br>
+&#x5E7E;&#x5206;&#x304B;&#x306E;&#x9670;&#x8B00;&#x8AD6;&#x3082;&#x6E67;&#x304D;&#x7ACB;&#x3063;&#x305F;&#x304C;&#x3001;&#x5143;&#x3005;&#x306E;&#x7F6A;&#x60AA;&#x611F;&#x3082;&#x76F8;&#x4FDF;&#x3063;&#x3066;&#x304B;&#x68EE;&#x585A;&#x6C0F;&#x306F;&#x305D;&#x3053;&#x304B;&#x3089;&#x66AB;&#x304F;&#x3057;&#x3066;&#x59FF;&#x3092;&#x304F;&#x3089;&#x307E;&#x3057;&#x3066;&#x3057;&#x307E;&#x3063;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x68EE;&#x585A;&#x6C0F;&#x306B;&#x306F;32&#x5E74;&#x524D;&#x306B;&#x6B7B;&#x5225;&#x3057;&#x305F;&#x59BB;&#x304C;&#x5C45;&#x305F;&#x304D;&#x308A;&#x3067;&#x3001;&#x89AA;&#x65CF;&#x3082;&#x304A;&#x3089;&#x305A;&#x5929;&#x6DAF;&#x5B64;&#x72EC;&#x306E;&#x8EAB;&#x3067;&#x3042;&#x308A;&#x635C;&#x7D22;&#x306F;&#x96E3;&#x822A;&#x3057;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x73FE;&#x5728;(20XX&#x5E74;&#x73FE;&#x5728;)&#x3067;&#x3082;&#x884C;&#x65B9;&#x4E0D;&#x660E;&#x3068;&#x3057;&#x3066;&#x6271;&#x308F;&#x308C;&#x3066;&#x3044;&#x308B;&#x3088;&#x3046;&#x3060;&#x3002;</p>
+<p>&#x68EE;&#x585A;&#x6C0F;&#x306F;&#x300C;&#x3053;&#x306E;&#x4E16;&#x306B;&#x306F;&#x89E3;&#x660E;&#x3067;&#x304D;&#x306A;&#x3044;&#x3082;&#x306E;&#x3082;&#x3042;&#x308B;&#x300D;&#x300C;&#x3044;&#x305A;&#x308C;&#x305D;&#x308C;&#x3068;&#x5411;&#x304D;&#x5408;&#x3046;&#x6642;&#x304C;&#x304F;&#x308B;&#x300D;&#x7B49;&#x3068;&#x53CB;&#x4EBA;&#x306B;&#x96F6;&#x3057;&#x3066;&#x3044;&#x305F;&#x3088;&#x3046;&#x3060;&#x3002;<br>
+&#x5642;&#x306B;&#x3088;&#x308C;&#x3070;&#x3001;&#x6C0F;&#x306F;&#x4F55;&#x304B;&#x8D85;&#x81EA;&#x7136;&#x73FE;&#x8C61;&#x7684;&#x306A;&#x3082;&#x306E;&#x306B;&#x3082;&#x95A2;&#x5FC3;&#x3092;&#x5BC4;&#x305B;&#x3066;&#x3044;&#x305F;&#x3068;&#x805E;&#x304F;&#x3002;<br>
+&#x307E;&#x305F;&#x5225;&#x306E;&#x53CB;&#x4EBA;&#x304C;&#x8A00;&#x3046;&#x306B;&#x306F;&#x300C;&#x5B50;&#x4F9B;&#x306F;&#x5C45;&#x305F;&#x300D;&#x3068;&#x306E;&#x4E8B;&#x3060;&#x304C;&#x3001;&#x6238;&#x7C4D;&#x4E0A;&#x305D;&#x306E;&#x3088;&#x3046;&#x306A;&#x4EBA;&#x9593;&#x306F;&#x5C45;&#x306A;&#x3044;&#x3002;<br>
+32&#x5E74;&#x524D;&#x306B;&#x4EA1;&#x304F;&#x306A;&#x3063;&#x3066;&#x3044;&#x308B;&#x59BB;&#x306F;&#x78BA;&#x304B;&#x306B;&#x5B50;&#x4F9B;&#x3092;&#x8EAB;&#x3054;&#x3082;&#x3063;&#x3066;&#x3044;&#x305F;&#x304C;&#x3001;&#x65E9;&#x7523;&#x306E;&#x70BA;&#x751F;&#x307E;&#x308C;&#x308B;&#x4E8B;&#x306A;&#x304F;&#x5B50;&#x4F9B;&#x306F;&#x6B7B;&#x4EA1;&#x3057;&#x3066;&#x3044;&#x308B;&#x3002;<br>
+&#x7CBE;&#x795E;&#x79D1;&#x533B;&#x3068;&#x3057;&#x3066;&#x306E;&#x843D;&#x3061;&#x5EA6;&#x6545;&#x306E;&#x60E8;&#x5287;&#x304B;&#x3001;&#x305D;&#x308C;&#x3068;&#x3082;&#x305D;&#x306E;&#x4ED6;&#x306E;&#x9670;&#x8B00;&#x304B;&#x3001;&#x306F;&#x305F;&#x307E;&#x305F;&#x6C0F;&#x72EC;&#x81EA;&#x304C;&#x62B1;&#x304F;&#x4F55;&#x304B;&#x3057;&#x3089;&#x306E;&#x601D;&#x60D1;&#x306B;&#x3088;&#x308B;&#x3082;&#x306E;&#x3060;&#x3063;&#x305F;&#x306E;&#x304B;&#x3002;<br>
+&#x672A;&#x3060;&#x8B0E;&#x591A;&#x304D;&#x4E8B;&#x4EF6;&#x3068;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3002;</p>
 </blockquote>
-<h1 id="npc">NPC</h1>
-<h2 id="%E3%82%AB%E3%83%8C%E3%83%9E%E3%83%A6%E3%82%A6%E3%82%B5%E3%82%AF">カヌマユウサク</h2>
+<h1 class="mume-header" id="npc">NPC</h1>
+
+<h2 class="mume-header" id="%E3%82%AB%E3%83%8C%E3%83%9E%E3%83%A6%E3%82%A6%E3%82%B5%E3%82%AF">&#x30AB;&#x30CC;&#x30DE;&#x30E6;&#x30A6;&#x30B5;&#x30AF;</h2>
+
 <ul>
-<li>巡査部長</li>
-<li>いい噂が立たない　ケンさんと仲が悪い</li>
-<li>大学でお金を貰って帰った？</li>
-<li>もと警備課　　追い出された</li>
-<li>「それにしてもいいカモが増えた。言う通り、シリウスには劣るがな。」
+<li>&#x5DE1;&#x67FB;&#x90E8;&#x9577;</li>
+<li>&#x3044;&#x3044;&#x5642;&#x304C;&#x7ACB;&#x305F;&#x306A;&#x3044;&#x3000;&#x30B1;&#x30F3;&#x3055;&#x3093;&#x3068;&#x4EF2;&#x304C;&#x60AA;&#x3044;</li>
+<li>&#x5927;&#x5B66;&#x3067;&#x304A;&#x91D1;&#x3092;&#x8CB0;&#x3063;&#x3066;&#x5E30;&#x3063;&#x305F;&#xFF1F;</li>
+<li>&#x3082;&#x3068;&#x8B66;&#x5099;&#x8AB2;&#x3000;&#x3000;&#x8FFD;&#x3044;&#x51FA;&#x3055;&#x308C;&#x305F;</li>
+<li>&#x300C;&#x305D;&#x308C;&#x306B;&#x3057;&#x3066;&#x3082;&#x3044;&#x3044;&#x30AB;&#x30E2;&#x304C;&#x5897;&#x3048;&#x305F;&#x3002;&#x8A00;&#x3046;&#x901A;&#x308A;&#x3001;&#x30B7;&#x30EA;&#x30A6;&#x30B9;&#x306B;&#x306F;&#x52A3;&#x308B;&#x304C;&#x306A;&#x3002;&#x300D;
 <ul>
-<li>言う通り -&gt; 誰かに言われた？</li>
+<li>&#x8A00;&#x3046;&#x901A;&#x308A; -&gt; &#x8AB0;&#x304B;&#x306B;&#x8A00;&#x308F;&#x308C;&#x305F;&#xFF1F;</li>
 </ul>
 </li>
 </ul>
-<h2 id="%E3%82%B5%E3%82%AB%E3%83%9F%E3%83%81">サカミチ</h2>
+<h2 class="mume-header" id="%E3%82%B5%E3%82%AB%E3%83%9F%E3%83%81">&#x30B5;&#x30AB;&#x30DF;&#x30C1;</h2>
+
 <ul>
-<li>イケオジ白バイ隊員</li>
-<li>ケンモクとカヌマと知り合い</li>
-<li>優しい</li>
+<li>&#x30A4;&#x30B1;&#x30AA;&#x30B8;&#x767D;&#x30D0;&#x30A4;&#x968A;&#x54E1;</li>
+<li>&#x30B1;&#x30F3;&#x30E2;&#x30AF;&#x3068;&#x30AB;&#x30CC;&#x30DE;&#x3068;&#x77E5;&#x308A;&#x5408;&#x3044;</li>
+<li>&#x512A;&#x3057;&#x3044;</li>
 </ul>
-<p>##　風見ルカ</p>
+<h2 class="mume-header" id="%E9%A2%A8%E8%A6%8B%E3%83%AB%E3%82%AB">&#x98A8;&#x898B;&#x30EB;&#x30AB;</h2>
+
 <ul>
-<li>N大監察医</li>
-<li>見た目がパンク</li>
+<li>N&#x5927;&#x76E3;&#x5BDF;&#x533B;</li>
+<li>&#x898B;&#x305F;&#x76EE;&#x304C;&#x30D1;&#x30F3;&#x30AF;</li>
 </ul>
-<h2 id="%E6%A9%8B%E5%85%88%E7%B4%85%E5%A7%AB">橋先紅姫</h2>
+<h2 class="mume-header" id="%E6%A9%8B%E5%85%88%E7%B4%85%E5%A7%AB">&#x6A4B;&#x5148;&#x7D05;&#x59EB;</h2>
+
 <ul>
-<li>クールなお姉さん</li>
+<li>&#x30AF;&#x30FC;&#x30EB;&#x306A;&#x304A;&#x59C9;&#x3055;&#x3093;</li>
 <li></li>
 </ul>
+</div>
+      </div>
+      <div class="md-sidebar-toc"><ul>
+<li><a href="#%E7%9B%AE%E6%AC%A1">&#x76EE;&#x6B21;</a></li>
+<li><a href="#todo%E6%B0%97%E3%81%AB%E3%81%AA%E3%82%8B%E7%AE%87%E6%89%80">TODO&#x30FB;&#x6C17;&#x306B;&#x306A;&#x308B;&#x7B87;&#x6240;</a></li>
+<li><a href="#%E6%83%85%E5%A0%B1">&#x60C5;&#x5831;</a>
+<ul>
+<li><a href="#%E6%8D%9C%E6%9F%BB%E8%B3%87%E6%96%99">&#x635C;&#x67FB;&#x8CC7;&#x6599;</a>
+<ul>
+<li><a href="#%E6%A8%8B%E5%B7%9D%E8%A3%95%E5%AD%9D%E3%81%AE%E4%BA%A4%E5%8F%8B%E9%96%A2%E4%BF%82">&#x6A0B;&#x5DDD;&#x88D5;&#x5B5D;&#x306E;&#x4EA4;&#x53CB;&#x95A2;&#x4FC2;</a></li>
+<li><a href="#%E7%8F%BE%E5%A0%B4%E7%8A%B6%E6%B3%81%E9%81%BA%E4%BD%93%E5%AE%89%E7%BD%AE">&#x73FE;&#x5834;&#x72B6;&#x6CC1;/&#x907A;&#x4F53;&#x5B89;&#x7F6E;</a></li>
+<li><a href="#%E9%8C%B2%E9%9F%B3%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8">&#x9332;&#x97F3;&#x30E1;&#x30C3;&#x30BB;&#x30FC;&#x30B8;</a></li>
+</ul>
+</li>
+<li><a href="#%E9%81%BA%E5%93%81">&#x907A;&#x54C1;</a>
+<ul>
+<li><a href="#ipad%E3%81%AE%E6%97%A5%E8%A8%98">ipad&#x306E;&#x65E5;&#x8A18;</a></li>
+<li><a href="#%E6%89%8B%E5%B8%B3">&#x624B;&#x5E33;</a></li>
+<li><a href="#%E8%B2%A1%E5%B8%83">&#x8CA1;&#x5E03;</a></li>
+<li><a href="#%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8">&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;</a></li>
+</ul>
+</li>
+<li><a href="#n%E5%A4%A7%E5%AD%A6">N&#x5927;&#x5B66;</a>
+<ul>
+<li><a href="#%E9%81%BA%E4%BD%93">&#x907A;&#x4F53;</a></li>
+<li><a href="#%E9%80%9A%E9%99%A2%E3%81%AE%E7%90%86%E7%94%B1">&#x901A;&#x9662;&#x306E;&#x7406;&#x7531;</a></li>
+</ul>
+</li>
+<li><a href="#%E7%8F%BE%E5%A0%B4%E3%81%A8%E8%81%9E%E3%81%8D%E8%BE%BC%E3%81%BF">&#x73FE;&#x5834;&#x3068;&#x805E;&#x304D;&#x8FBC;&#x307F;</a>
+<ul>
+<li><a href="#%E6%99%AE%E6%AE%B5%E3%81%AE%E6%A7%98%E5%AD%90">&#x666E;&#x6BB5;&#x306E;&#x69D8;&#x5B50;</a></li>
+<li><a href="#%E7%97%85%E9%99%A2%E3%81%AB%E8%A1%8C%E3%81%A3%E3%81%9F%E3%81%A8%E3%81%8D">&#x75C5;&#x9662;&#x306B;&#x884C;&#x3063;&#x305F;&#x3068;&#x304D;</a></li>
+<li><a href="#%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">&#x30AB;&#x30EC;&#x30F3;&#x30C0;&#x30FC;</a></li>
+</ul>
+</li>
+<li><a href="#%E6%9D%BE%E4%BC%8F%E9%96%A2%E9%80%A3">&#x677E;&#x4F0F;&#x95A2;&#x9023;</a>
+<ul>
+<li><a href="#%E9%81%BA%E8%A8%80">&#x907A;&#x8A00;</a></li>
+<li><a href="#%E3%82%B9%E3%83%9E%E3%83%9B">&#x30B9;&#x30DE;&#x30DB;</a></li>
+<li><a href="#%E9%81%BA%E4%BD%93-1">&#x907A;&#x4F53;</a></li>
+<li><a href="#%E9%81%BA%E5%93%81-1">&#x907A;&#x54C1;</a></li>
+</ul>
+</li>
+<li><a href="#%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%83%A8%E5%B1%8B">&#x677E;&#x4F0F;&#x306E;&#x90E8;&#x5C4B;</a>
+<ul>
+<li><a href="#%E6%96%B0%E8%81%9E%E8%A8%98%E4%BA%8B-%E6%9D%BE%E4%BC%8F%E3%81%AE%E9%81%8E%E5%8E%BB">&#x65B0;&#x805E;&#x8A18;&#x4E8B;&#x3000;&#x677E;&#x4F0F;&#x306E;&#x904E;&#x53BB;</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%BD%E4%BC%9A%E5%9B%B3%E6%9B%B8%E9%A4%A8-1">&#x56FD;&#x4F1A;&#x56F3;&#x66F8;&#x9928;</a>
+<ul>
+<li><a href="#%E7%8A%AF%E7%BD%AA%E3%81%AE%E3%82%84%E3%81%A4">&#x72AF;&#x7F6A;&#x306E;&#x3084;&#x3064;</a></li>
+<li><a href="#%E5%B9%BD%E9%9C%8A%E9%A8%92%E3%81%8E">&#x5E7D;&#x970A;&#x9A12;&#x304E;</a></li>
+</ul>
+</li>
+<li><a href="#z%E9%9C%8A%E5%9C%92">Z&#x970A;&#x5712;</a></li>
+</ul>
+</li>
+<li><a href="#%E9%81%8E%E5%8E%BB%E3%81%AE%E4%BA%8B%E4%BB%B6">&#x904E;&#x53BB;&#x306E;&#x4E8B;&#x4EF6;</a>
+<ul>
+<li><a href="#%E4%B8%80%E8%A6%A7">&#x4E00;&#x89A7;</a></li>
+<li><a href="#%E8%A9%B3%E7%B4%B0">&#x8A73;&#x7D30;</a>
+<ul>
+<li><a href="#%E7%8C%9F%E5%A5%87%E7%8A%AF%E7%BD%AA-%E8%A1%80%E5%A1%97%E3%82%8C%E5%A4%AB%E4%BA%BA-%E9%9B%A8%E5%AE%AE%E8%B2%B4%E7%90%86%E7%B5%B5">&#x731F;&#x5947;&#x72AF;&#x7F6A;&#x3000;&#x8840;&#x5857;&#x308C;&#x592B;&#x4EBA; &#x3010;&#x96E8;&#x5BAE;&#x8CB4;&#x7406;&#x7D75;&#x3011;</a></li>
+<li><a href="#%E3%83%87%E3%82%A3%E3%83%8A%E3%83%BC%E3%83%87%E3%82%B6%E3%82%A4%E3%83%8A%E3%83%BC">&#x30C7;&#x30A3;&#x30CA;&#x30FC;&#x30C7;&#x30B6;&#x30A4;&#x30CA;&#x30FC;</a></li>
+<li><a href="#%E3%83%8F%E3%83%BC%E3%83%B4%E3%82%A7%E3%82%B9%E3%83%88">&#x30CF;&#x30FC;&#x30F4;&#x30A7;&#x30B9;&#x30C8;</a></li>
+<li><a href="#n%E5%A4%A7%E5%AD%A6%E7%97%85%E9%99%A2%E3%81%AE%E6%83%A8%E5%8A%87">N&#x5927;&#x5B66;&#x75C5;&#x9662;&#x306E;&#x60E8;&#x5287;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#npc">NPC</a>
+<ul>
+<li><a href="#%E3%82%AB%E3%83%8C%E3%83%9E%E3%83%A6%E3%82%A6%E3%82%B5%E3%82%AF">&#x30AB;&#x30CC;&#x30DE;&#x30E6;&#x30A6;&#x30B5;&#x30AF;</a></li>
+<li><a href="#%E3%82%B5%E3%82%AB%E3%83%9F%E3%83%81">&#x30B5;&#x30AB;&#x30DF;&#x30C1;</a></li>
+<li><a href="#%E9%A2%A8%E8%A6%8B%E3%83%AB%E3%82%AB">&#x98A8;&#x898B;&#x30EB;&#x30AB;</a></li>
+<li><a href="#%E6%A9%8B%E5%85%88%E7%B4%85%E5%A7%AB">&#x6A4B;&#x5148;&#x7D05;&#x59EB;</a></li>
+</ul>
+</li>
+</ul>
+</div>
+      <a id="sidebar-toc-btn">&#x2261;</a>
+    
+    
+    
+    
+    
+    
+    
+    
+<script>
 
-</body>
-</html>
+var sidebarTOCBtn = document.getElementById('sidebar-toc-btn')
+sidebarTOCBtn.addEventListener('click', function(event) {
+  event.stopPropagation()
+  if (document.body.hasAttribute('html-show-sidebar-toc')) {
+    document.body.removeAttribute('html-show-sidebar-toc')
+  } else {
+    document.body.setAttribute('html-show-sidebar-toc', true)
+  }
+})
+</script>
+      
+  
+    </body></html>
